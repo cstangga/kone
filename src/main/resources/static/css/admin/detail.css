@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+.contractDetail {
+	display: flex;
+	flex-direction: column; /* 세로 방향으로 나열 */
+	justify-content: center; /* 수평 중앙 정렬 */
+	align-items: center;
+}
+
+.header {
+	margin: 25px 0;
+	width: 100%;
+	display:flex;
+	justify-content: space-between;
+}
+
+.btns {
+	display: flex;
+	gap:15px;
+}
+
+.member_info {
+	display: flex;
+	flex-direction: row;
+	gap: 30px;
+	justify-content: start;
+	align-items: center;
+	width:auto;
+}
+
+.title{
+	font-size: 22px;
+	padding-bottom: 8px;
+}
+
+.input_box {
+	border-radius: 5px;
+	padding: 3px 10px;
+	border: 1px solid #ddd;
+	background-color: #f8f8f8;
+	font-weight: 600;
+	width:180px;
+}
+
+.info-text {
+	padding: 8px;
+	background-color: #f8f8f8;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	min-height: 20px;
+	width:100%;
+	font-weight: 600;
+}
+
+footer {
+	gap:15px;
+}

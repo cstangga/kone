@@ -1,0 +1,233 @@
+@charset "UTF-8";
+
+body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+	width:98vw;
+}
+
+.hidden-sec {
+	display: none !important;
+}
+
+.active-sec {
+	display: block;
+}
+
+article {
+	width: 690px;
+	display: flex;
+	flex-direction: column;
+}
+
+#contract_sec {
+	margin-bottom: 10px
+}
+
+#account_sec {
+	display: flex;
+	padding: 20px;
+	margin-top: 100px;
+	margin-bottom: 10px;
+	justify-content: center;
+}
+
+#oath_sec {
+	border: 1px solid #000;
+	padding: 40px;
+}
+
+nav {
+	display: flex;
+	justify-content: space-between;
+	margin: 20px 0;
+}
+
+/** 계약서 css */
+#contract_sec table {
+	width: 690px;
+}
+
+#contract_sec thead {
+	background-color: rgb(211, 211, 211);
+}
+
+#contract_sec table, #contract_sec thead, #contract_sec tbody,
+	#contract_sec th, #contract_sec td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+#contract_sec th, #contract_sec td {
+	padding: 5px;
+}
+
+#contract_sec span {
+	font-weight: 600;
+}
+
+#contract_sec .small-cont {
+	font-weight: 500;
+	font-size: 12px;
+	padding-left: 20px;
+}
+
+/** 계좌정보 css */
+#account_sec .form-container {
+	width: 450px;
+	background: white;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#account_sec .form-group {
+	margin-bottom: 15px;
+}
+
+#account_sec label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+#account_sec .info-text {
+	padding: 8px;
+	background-color: #f8f8f8;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	min-height: 20px;
+	width: 100%;
+	font-weight: 600;
+}
+
+#account_sec .form-control {
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	min-height: 20px;
+	width: 100%;
+	font-weight: 600;
+}
+
+#account_sec .input-group .upload-name {
+	display: inline-block;
+	height: 40px;
+	vertical-align: middle;
+	border: 1px solid #dddddd;
+	width: 50%;
+	color: #999999;
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+		border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+#account_sec .input-group label {
+	display: inline-block;
+	padding: 10px 20px;
+	color: #fff;
+	vertical-align: middle;
+	background-color: black;
+	cursor: pointer;
+	height: 40px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	line-height: 1.2rem;
+}
+
+#account_sec input[type="file"] {
+	position: absolute;
+	width: 0;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
+}
+
+#account_sec .file-list {
+	margin-top: 20px;
+}
+
+#account_sec .file-group {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+	align-items: center;
+}
+
+#account_sec .file-name {
+	flex: 1;
+	padding: 8px;
+	background-color: #f8f8f8;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-weight: 600;
+}
+
+#account_sec button {
+	padding: 8px 15px;
+	background-color: #333;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#account_sec button:hover {
+	background-color: #444;
+}
+
+/** 보안서약서 css */
+#oath_sec .title {
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 30px;
+}
+
+#oath_sec .content {
+	line-height: 1.8;
+	margin-bottom: 30px;
+}
+
+#oath_sec .list {
+	padding-left: 20px;
+}
+
+#oath_sec .list li {
+	margin-bottom: 15px;
+}
+
+#oath_sec .signature {
+	margin-top: 50px;
+	text-align: center;
+	width: 100;
+}
+
+#oath_sec .sign-table {
+	width: 100%;
+	margin-top: 20px;
+	border-collapse: collapse;
+	display: flex;
+	justify-content: center;
+}
+
+#oath_sec .sign-table td {
+	padding: 5px 15px;
+	height: 30px;
+	text-align: left;
+}
+
+#oath_sec .footer {
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 40px;
+}
+
+#oath_sec span {
+	font-weight: 600;
+}

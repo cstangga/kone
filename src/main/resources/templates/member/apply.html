@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/fragments :: myhead}">
+</head>
+<link rel="stylesheet" href="../css/apply.css" />
+<body>
+
+	<div class="main_box">
+		<section class="main_header">[케이원] TIMSS 현장요원 모집</section>
+
+		<section class="main_subtitle">
+			<div>
+				<ul>
+					<li>(근무내용) 학교 컴퓨터 점검 및 시험 지원</li>
+					<li>(모집인원) 초등/중학교 (최대 300여명)</li>
+					<li>(근무지역) (전국) 집근처 초등/중학교</li>
+					<li>(급여) 10만원/1일 (온라인 교육 필수 이수(60분 내외))</li>
+				</ul>
+			</div>
+			<div>
+				<ul>
+					<li>* 향후 채용 시 일용직으로 계약할 예정이며, 일용직으로 신고됨</li>
+					<li>* 채용 시 준비 서류 : 신분증 사본, 통장 사본</li>
+					<li>[문의 전화] 070-7601-4312</li>
+				</ul>
+			</div>
+		</section>
+
+		<form id="applyform" th:action=@{/member/apply} method="POST"
+			class="main_content">
+			<dl>
+				<dt>1. 성명</dt>
+				<dd>
+					<input class="form-control" type="text" name="name" id="name"
+						maxlength="20" placeholder="이름을 입력해주세요." required />
+				</dd>
+				<dt>2. 연락처</dt>
+				<dd>
+					<input class="form-control" type="text" name="phonenumber"
+						id="phonenumber" maxlength="11"
+						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+						placeholder="휴대폰번호를 입력해주세요.( - 없이 번호만 입력)" required />
+				</dd>
+				<dt>3. 지역</dt>
+				<dd class="subtitle">현 거주 지역을 선택해 주세요.</dd>
+				<dd>
+					<select class="form-select" name="desiredArea" id="desiredArea">
+						<option disabled selected hidden>지역을 선택해주세요.</option>
+						<option value="서울특별시">서울특별시</option>
+						<option value="경기">경기</option>
+						<option value="인천광역시">인천광역시</option>
+						<option value="부산광역시">부산광역시</option>
+						<option value="대전광역시">대전광역시</option>
+						<option value="광주광역시">광주광역시</option>
+						<option value="대구광역시">대구광역시</option>
+						<option value="울산광역시">울산광역시</option>
+						<option value="세종특별자치시">세종특별자치시</option>
+						<option value="제주특별자치도">제출특별자치도</option>
+						<option value="강원도">강원도</option>
+						<option value="경상북도">경상북도</option>
+						<option value="경상남도">경상남도</option>
+						<option value="전라북도">전라북도</option>
+						<option value="전라남도">전라남도</option>
+						<option value="충청북도">충청북도</option>
+						<option value="충청남도">충청남도</option>
+					</select>
+				</dd>
+				<dt>4. 주소</dt>
+				<dd class="subtitle">현 거주지 주소를 입력해주세요.</dd>
+				<dd>
+					<input class="form-control" type="text"
+						placeholder="기본 주소와 상세주소를 입력해주세요" name="address" id="address"
+						required readonly />
+				</dd>
+			</dl>
+			<div class="d-flex gap-3">
+				<button id="btnSubmit" class="btn btn-outline-success">지원</button>
+				<button id="btnBack" class="btn btn-outline-secondary"
+					th:onclick="location.href='/'">취소</button>
+			</div>
+		</form>
+	</div>
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<!-- 주소 검색 API -->
+	<script
+		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+	<script src="../js/home/apply.js"></script>
+</body>
+</html>

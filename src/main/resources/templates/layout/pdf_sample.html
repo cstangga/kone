@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="|${info.name}_계약서|"></title>
+</head>
+<body
+	style="display: flex; flex-direction: column; align-items: center; height: 100vh; width: 100vw;">
+
+	<article style="width: 690px; display: flex; flex-direction: column;">
+
+		<!-- 계약서 폼 -->
+		<section style="margin-bottom: 10px;" th:if="${info.eType=='일반'}">
+			<div
+				style="display: flex; justify-content: center; margin-bottom: 15px;">
+				<h4 style="font-size: 24px">일용직 계약서</h4>
+			</div>
+			<div>
+				(주)케이원(이하 “갑”이라 칭함)과 <span th:text=${info.name}></span> (이하 “을”이라
+				칭함)은 “한국교육과정평가원”의 “2024년 학업성취도 평가 시행위탁 용역사업”(이하 “용역”이라 칭함) 일용직 수행을
+				위한 계약을 다음과 같이 체결한다.
+			</div>
+			<div>
+				<table
+					style="width: 690px; margin-top: 15px; border: 1px solid black; border-collapse: collapse;">
+					<thead
+						style="background-color: rgb(211, 211, 211); border: 1px solid black; border-collapse: collapse;">
+						<tr>
+							<th
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">구분</th>
+							<th
+								styel="	border: 1px solid black; border-collapse: collapse;padding: 5px;">내역</th>
+						</tr>
+					</thead>
+					<tbody style="border: 1px solid black; border-collapse: collapse;">
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">계약서
+								종류</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">일용직
+								계약서</td>
+						</tr>
+						<tr>
+							<td rowspan="2"
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">계약
+								당사자</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">갑
+								: (주) 케이원<br>
+							</td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">을
+								: <span style="font-weight: 600;" th:text=${info.name}></span>
+								(휴대폰번호) <span style="font-weight: 600;"
+								th:text=|${#strings.substring(info.phoneNumber,0,3)}-${#strings.substring(info.phoneNumber,3,7)}-${#strings.substring(info.phoneNumber,7,11)}|></span>
+							</td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">계약명</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">2024년
+								학업 성취도 평가 시행 위탁 용역 사업</td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">계약
+								체결일</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;"><span
+								style="font-weight: 600;"
+								th:text="${#temporals.format(info.creationDate, 'yyyy년 MM월 dd일')}"></span></td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">계약금액</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">일금
+								￦<span style="font-weight: 600;"
+								th:text="${#numbers.formatInteger(info.pay, 3, 'COMMA')}"></span>
+							</td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">계약일시</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;"><span
+								style="font-weight: 600;" th:each="day : ${info.workingDays}"
+								th:text="${#temporals.format(day, 'MM월 dd일, ')}"></span> <br />근무시간
+								: 08:00 ~ 17:00 <span
+								style="font-weight: 500; font-size: 12px; padding-left: 20px;">※
+									학교별로 근무시간 상이할 수 있음</span></td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">용역장소</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">지정근무지</td>
+						</tr>
+						<tr>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">대금정산</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">완료후
+								15일~30일내 지급</td>
+						</tr>
+						<tr>
+							<td
+								style="width: 140px; border: 1px, solid black; border-collapse: collapse; padding: 5px;">기타</td>
+							<td
+								style="border: 1px solid black; border-collapse: collapse; padding: 5px;">본
+								계약서에 정한 이외의 사항은 "갑"과 "고객"간의 원청 계약 내용을 준용하며, 본 계약에 우선하여 적용 및
+								해석하기로 한다</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table
+					style="width: 690px; margin-bottom: 10px; border: 1px solid black; border-collapse: collapse;">
+					<tr>
+						<td
+							style="border: 1px solid black; border-collapse: collapse; padding: 5px;">사업자번호
+							: 107-81-54150</td>
+						<td
+							style="border: 1px solid black; border-collapse: collapse; padding: 5px;">주민등록번호
+							: <span style="font-weight: 600;"
+							th:text=|${#strings.substring(info.residentNumber,0,6)}-${#strings.substring(info.residentNumber,6,13)}|></span>
+						</td>
+					</tr>
+					<tr>
+						<td
+							style="width: 320px; padding-bottom: 20px; border: 1px solid black; border-collapse: collapse; padding: 5px;">
+							<p style="margin-bottom: 2px">"갑"</p>
+							<p>
+								주소 : 서울시 금천구 가산디지털로 2로 14, <br>1450호(가산동, 대륭테크노타운 12차)
+							</p>
+							<p style="margin-top: 1px">상호 : (주) 케이원</p>
+							<p>대표자 : 송관섭 (인)</p>
+						</td>
+						<td
+							style="border: 1px solid black; border-collapse: collapse; padding: 5px;"><p
+								style="margin-bottom: 2px">"을"</p>
+							<p>
+								주소 : <span style="font-weight: 600;" th:text=${info.address}>주소</span>
+							</p>
+							<p style="position: relative;">
+								이름 : <span style="font-weight: 600;" th:text=${info.name}>이름</span>
+								(인) <img
+									th:src="@{'http://localhost:8081/uploads/' + ${info.img.sign1Img}}"
+									style="position: absolute; left: 70px; bottom: -10px;"
+									width="110px" height="45px" />
+							</p></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<p>
+					<b>제1조. 보안요구 사항</b>
+				<p>- “을”은 “갑” 및 한국교육과정평가원 개인정보보호 및 보안 정책을 준수해야 하며 보안 관리 감독 관련
+					사항을 충실히 이행토록 한다.
+			</div>
+
+		</section>
+
+
+		<!-- 보안서약서 폼 -->
+		<section
+			style="border: 1px solid #000; padding: 80px 40px; margin-top: 60px">
+			<div
+				style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 50px;">보안서약서</div>
+
+			<div style="line-height: 1.8; margin-bottom: 30px;">본인은 2024년
+				10월 28일부터 '2024년 학업성취도 평가 시행 위탁 용역'을 수행함에 있어 다음 사항을 준수할 것을 엄숙히
+				서약합니다.</div>
+
+			<ol style="padding-left: 20px;">
+				<li style="margin-bottom: 15px;">본인은 업무 중 알게 된 일체의 내용이 직무상 기밀
+					사항임을 인정한다.</li>
+				<li style="margin-bottom: 15px;">본인은 이 기밀을 누설함이 국가안전보장 및 국가이익에
+					위해가 될 수 있음을 인식하여 업무수행 중 지득한 제반 기밀사항을 일체 누설하거나 공개하지 아니한다.</li>
+				<li style="margin-bottom: 15px;">본인이 이 기밀을 누설하거나 관계 규정을 위반한 때에는
+					관련 법령 및 제약에 따라 어떠한 처벌 및 불이익도 감수한다.</li>
+				<li style="margin-bottom: 15px;">본인은 용역업체 보안 준수사항(붙임 3-1)을 지킬
+					것을 서약한다.</li>
+				<li style="margin-bottom: 15px;">본인은 위의 사항을 위반하였을 경우 발생되는 의반사항에
+					대하여 책임을 부담한다.</li>
+			</ol>
+
+			<div style="margin-top: 50px; text-align: center; width: 100%;">
+				<span
+					th:text="${#temporals.format(info.creationDate, 'yyyy년 MM월 dd일')}">작성날짜</span>
+				<div style="display:flex;justify-content:center">
+					<table style="margin-top: 20px;" width="200">
+						<tr>
+							<td style="padding: 5px 15px; text-align: left;">소
+								속 :</td>
+							<td style="padding: 5px 15px; height: 30px; text-align: left;">케이원</td>
+						</tr>
+						<tr>
+							<td style="padding: 5px 15px; height: 30px; text-align: left;">직
+								급 :</td>
+							<td style="padding: 5px 15px; height: 30px; text-align: left;">사
+								원</td>
+						</tr>
+						<tr>
+							<td style="padding: 5px 15px; height: 30px; text-align: left;">성
+								명 :</td>
+							<td
+								style="position: relative; padding: 5px 15px; height: 30px; text-align: left;"><span
+								th:text="${info.name}"></span> (인) <img
+								th:src="@{'http://localhost:8081/uploads/' + ${info.img.sign2Img}}"
+								style="position: absolute; left: 70px; bottom: -10px"
+								width="110px" height="45px" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div
+				style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 50px;">한국교육과정평가원장
+				귀하</div>
+		</section>
+
+	</article>
+</body>
+</html>

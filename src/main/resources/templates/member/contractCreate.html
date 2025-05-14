@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/fragments :: myhead}">
+</head>
+<link rel="stylesheet" href="../css/contract_form.css" />
+
+<body>
+	<article>
+		<nav th:if="${info.eType=='일반'}">
+			<button id="prevBtn" class="btn btn-light">HOME</button>
+			<button id="nextBtn" class="btn btn-light">NEXT→</button>
+		</nav>
+		<nav th:if="${info.eType=='지사'}">
+			<button id="prevBtn" class="btn btn-light"
+				onclick="location.href='/logout'">HOME</button>
+			<button id="submitBtn" class="btn btn btn-success">SUBMIT</button>
+		</nav>
+
+
+		<form
+			th:action="@{${info.eType}=='일반' ? '/contracts/create' : '/contracts/create_oath'}"
+			method="post" id="contractForm" enctype="multipart/form-data">
+
+			<!-- 숨겨진 ID 필드 : info가 null이면 작성이며, null이 아니면 수정 -->
+			<input type="hidden" name="contentMode"
+				th:value="${info.creationDate == null ? 'create' : 'edit'}">
+
+			<!--  -->
+			<th:block th:if="${info.eType=='일반'}">
+
+				<section th:replace="~{/layout/form_create::contract_sec}"></section>
+
+				<!-- 서명 모달 띄우기 -->
+				<div id="signModal1" class="modal fade show" tabindex="-1">
+					<div class=" modal-dialog  modal-lg">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="signature-container">
+									<h2 class="mb-4">전자서명</h2>
+
+									<div id="signature1"></div>
+
+									<div class="buttons">
+										<button class="btn btn-secondary" id="reset1">다시 서명</button>
+										<button class="btn btn-primary" id="save1">서명 저장</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<section th:replace="~{/layout/form_create::account_sec}"></section>
+				<section th:replace="~{/layout/form_create::oath_sec}"></section>
+			</th:block>
+
+			<th:block th:if="${info.eType=='지사'}">
+				<section th:replace="~{/layout/form_create::oath_sec(display='1')}"></section>
+			</th:block>
+
+
+			<!-- 서명 모달 띄우기 -->
+			<div id="signModal2" class="modal fade show" tabindex="-1">
+				<div class=" modal-dialog  modal-lg">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="signature-container">
+								<h2 class="mb-4">전자서명</h2>
+
+								<div id="signature2"></div>
+
+								<div class="buttons">
+									<button class="btn btn-secondary" id="reset2">다시 서명</button>
+									<button class="btn btn-primary" id="save2">서명 저장</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+	</article>
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- jSignature 라이브러리 추가 -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/jsignature@2.1.3/libs/jSignature.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/jsignature@2.1.3/libs/jSignature.CompressorBase30.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/jsignature@2.1.3/libs/jSignature.CompressorSVG.js"></script>
+
+	<th:block th:if="${info.eType=='일반'}">
+		<script src="../js/create.js"></script>
+		<script src="../js/updateSection.js"></script>
+	</th:block>
+	<script th:if="${info.eType=='지사'}" src="../js/create_oath.js"></script>
+
+</body>
+</html>

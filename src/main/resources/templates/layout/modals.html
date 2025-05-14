@@ -1,0 +1,283 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- 계약서 수정 모달 -->
+<div th:fragment="updateModal" class="modal fade" id="updateModal"
+	tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="exampleModalLabel">계약서 수정</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body d-flex flex-column gap-4">
+
+				<div class="d-flex">
+					<label class="col-2">비용</label> <input class="input_box flex-fill"
+						type="text" name="pay" id="pay" th:value="${info.pay}"
+						style="background-color: white; font-weight: normal;" />
+				</div>
+
+				<div class="d-flex">
+					<label class="col-2">주민번호</label> <input
+						class="input_box flex-fill" type="text" name="residentNum"
+						id="reside" th:value="${info.residentNumber}"
+						style="background-color: white; font-weight: normal;" />
+				</div>
+
+				<div class="d-flex">
+					<label class="col-2">계좌번호</label> <input
+						class="input_box flex-fill" type="text" name="accountNum"
+						id="accountNum" th:value="${info.accountNumber}"
+						style="background-color: white; font-weight: normal;" />
+				</div>
+
+
+				<div class="d-flex">
+					<label class="col-2">예금주</label> <input class="input_box flex-fill"
+						type="text" name="accountHold" id="accountHold"
+						th:value="${info.accountHolder}"
+						style="background-color: white; font-weight: normal;" />
+				</div>
+
+				<input type="hidden" th:value="${info.id}" id="member_id" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+					data-bs-dismiss="modal">취소</button>
+				<button type="button" class="submit-btn btn btn-dark">등록</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 회원정보 수정 모달 -->
+<div th:fragment="updateMember" class="modal fade" id="updateMember"
+	tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="exampleModalLabel">회원정보 수정</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body d-flex flex-column gap-4">
+
+				<div class="d-flex">
+					<div class="col-3 justify-content-center align-self-center">
+						<label>이름</label>
+					</div>
+					<input class="form-control flex-fill" type="text" name="pay"
+						id="pay" th:value="${contract.name}"
+						style="background-color: white; font-weight: normal;" />
+				</div>
+
+				<div class="d-flex">
+					<div class="col-3 justify-content-center align-self-center">
+						<label>연락처</label>
+					</div>
+					<input class="form-control flex-fill" type="text"
+						name="residentNum" id="reside" th:value="${contract.phoneNumber}"
+						style="background-color: white; font-weight: normal;" />
+				</div>
+
+				<div class="d-flex">
+					<div class="col-3 justify-content-center align-self-center">
+						<label>주소</label>
+					</div>
+					<input class="form-control flex-fill" type="text" name="accountNum"
+						id="accountNum" th:value="${contract.address}"
+						style="background-color: white; font-weight: normal;" readonly />
+				</div>
+
+
+				<div class="d-flex">
+					<div class="col-3 justify-content-center align-self-center">
+						<label>희망근무지역</label>
+					</div>
+					<select class="form-select" name="desiredArea" id="desiredArea">
+						<option value="서울특별시">서울특별시</option>
+						<option value="경기">경기</option>
+						<option value="인천광역시">인천광역시</option>
+						<option value="부산광역시">부산광역시</option>
+						<option value="대전광역시">대전광역시</option>
+						<option value="광주광역시">광주광역시</option>
+						<option value="대구광역시">대구광역시</option>
+						<option value="울산광역시">울산광역시</option>
+						<option value="세종특별자치시">세종특별자치시</option>
+						<option value="제주특별자치도">제출특별자치도</option>
+						<option value="강원도">강원도</option>
+						<option value="경상북도">경상북도</option>
+						<option value="경상남도">경상남도</option>
+						<option value="전라북도">전라북도</option>
+						<option value="전라남도">전라남도</option>
+						<option value="충청북도">충청북도</option>
+						<option value="충청남도">충청남도</option>
+					</select>
+				</div>
+
+				<input type="hidden" th:value="${contract.id}" id="member_id" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+					data-bs-dismiss="modal">취소</button>
+				<button type="button" class="submit-btn btn btn-dark">수정</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 학교 검색 모달  -->
+<div th:fragment="seachSchoolModal" class="modal fade"
+	id="schoolSearchModal" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">학교 검색</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<!-- 검색 폼 -->
+				<div class="row mb-3">
+					<div class="col">
+						<input type="text" id="schoolSearchInput" class="form-control"
+							placeholder="학교명 검색">
+					</div>
+				</div>
+
+				<!-- 학교 목록 테이블 -->
+				<table class="table table-hover" id="schoolTable">
+					<thead>
+						<tr>
+							<th>학교명</th>
+							<th>지역</th>
+							<th>시험일자</th>
+							<th>선택</th>
+						</tr>
+					</thead>
+					<tbody id="schoolTableBody">
+						<!-- JavaScript로 동적으로 채워질 부분 -->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 선발 선택 모달 -->
+<div th:fragment="selectModal" class="modal fade" id="selectionModal"
+	tabindex="-1" aria-labelledby="selectionModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="selectionModalLabel">직원형태 선택</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form th:action="@{/admin/selection}" method="post">
+					<input type="hidden" th:name="${_csrf?.parameterName}"
+						th:value="${_csrf?.token}" /> <input type="hidden"
+						id="contractId" th:value="${contract.id}" /> <input type="hidden"
+						name="id" th:value="${contract.id}" />
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="empType"
+							id="typeUser" value="USER" checked> <label
+							class="form-check-label" for="typeUser"> 일반 </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="empType"
+							id="typeBranch" value="BRANCH"> <label
+							class="form-check-label" for="typeBranch"> 지사 </label>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">취소</button>
+						<button type="submit" class="btn btn-primary">확인</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 관리자 선발요원 취소 모달 -->
+<div th:fragment="cancelModal" class="modal fade" id="cancelModal"
+	tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="selectionModalLabel">선발요원 취소</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form th:action="@{/admin/cancel}" method="post" id="cancelForm">
+					<input type="hidden" th:value="${contract.id}" name="id" />
+					<div class="mb-3">
+						<label class="form-label">취소 날짜</label> <input
+							class="form-control" type="text"
+							th:value="${#dates.format(#calendars.createNow(), 'yyyy년 MM월 dd일')}"
+							disabled />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">취소 사유</label>
+						<textarea id="reason" class="form-control" name="reason"
+							placeholder="취소 사유를 입력하시오" style="resize: none;"></textarea>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">상담사</label> <input type="text"
+							id="callname" class="form-control" name="callName"
+							placeholder="담당자를 입력하시오" />
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+					data-bs-dismiss="modal">취소</button>
+				<button type="submit" class="btn btn-primary" id="submitCancelBtn">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 사용자/미선발인 회원의선발요원 취소 모달 -->
+<div th:fragment="cancelSelfModal" class="modal fade"
+	id="cancelSelfModal" tabindex="-1" aria-labelledby="cancelModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="selectionModalLabel">선발요원 취소</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form th:action="@{/member/applyCancel}" method="post"
+					id="cancelForm">
+					<input type="hidden" th:value="${member.id}" name="id" />
+					<div class="mb-3">
+						<label class="form-label">취소 날짜</label> <input
+							class="form-control" type="text"
+							th:value="${#dates.format(#calendars.createNow(), 'yyyy년 MM월 dd일')}"
+							disabled />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">취소 사유</label>
+						<textarea class="form-control" id="reason" name="reason"
+							placeholder="취소 사유를 입력하시오" style="resize: none;" required></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+					data-bs-dismiss="modal">취소</button>
+				<button type="submit" id="submitBtn" class="btn btn-primary">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

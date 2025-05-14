@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="~{/layout/fragments :: myhead}">
+</head>
+<link rel="stylesheet" href="../css/home/main.css" />
+
+<body>
+
+	<div class="box">
+		<a th:href="@{/member/apply}">
+			<div class="box_de box_apply">
+				<svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					style="flex-grow: 0; flex-shrink: 0; width: 40px; height: 40px; position: relative;"
+					preserveAspectRatio="none">
+                <path
+						d="M18.3333 6.66688H6.66666C5.78261 6.66688 4.93476 7.01807 4.30964 7.64319C3.68452 8.26831 3.33333 9.11616 3.33333 10.0002V33.3335C3.33333 34.2176 3.68452 35.0654 4.30964 35.6906C4.93476 36.3157 5.78261 36.6669 6.66666 36.6669H30C30.884 36.6669 31.7319 36.3157 32.357 35.6906C32.9821 35.0654 33.3333 34.2176 33.3333 33.3335V21.6669M30.8333 4.16688C31.4964 3.50384 32.3956 3.13135 33.3333 3.13135C34.271 3.13135 35.1703 3.50384 35.8333 4.16688C36.4964 4.82992 36.8689 5.7292 36.8689 6.66688C36.8689 7.60456 36.4964 8.50384 35.8333 9.16688L20 25.0002L13.3333 26.6669L15 20.0002L30.8333 4.16688Z"
+						stroke="white" stroke-width="4" stroke-linecap="round"
+						stroke-linejoin="round"></path>
+            </svg>
+				<div
+					style="display: flex; flex-direction: column; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; gap: 4px;">
+					<div
+						style="display: flex; justify-content: center; align-items: flex-start; align-self: stretch; flex-grow: 0; flex-shrink: 0; position: relative;">
+						<p
+							style="flex-grow: 0; flex-shrink: 0; font-size: 24px; font-weight: 600; text-align: center; color: #fff;">
+							지원</p>
+					</div>
+				</div>
+			</div>
+		</a> <a th:href="@{/member/login}">
+			<div class="box_de box_contract">
+				<svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					style="flex-grow: 0; flex-shrink: 0; width: 40px; height: 40px; position: relative;"
+					preserveAspectRatio="none">
+                <path
+						d="M26.6667 6.66683H30C30.8841 6.66683 31.7319 7.01802 32.357 7.64314C32.9821 8.26826 33.3333 9.11611 33.3333 10.0002V33.3335C33.3333 34.2176 32.9821 35.0654 32.357 35.6905C31.7319 36.3156 30.8841 36.6668 30 36.6668H10C9.11595 36.6668 8.2681 36.3156 7.64298 35.6905C7.01786 35.0654 6.66667 34.2176 6.66667 33.3335V10.0002C6.66667 9.11611 7.01786 8.26826 7.64298 7.64314C8.2681 7.01802 9.11595 6.66683 10 6.66683H13.3333M15 3.3335H25C25.9205 3.3335 26.6667 4.07969 26.6667 5.00016V8.3335C26.6667 9.25397 25.9205 10.0002 25 10.0002H15C14.0795 10.0002 13.3333 9.25397 13.3333 8.3335V5.00016C13.3333 4.07969 14.0795 3.3335 15 3.3335Z"
+						stroke="#1E1E1E" stroke-width="4" stroke-linecap="round"
+						stroke-linejoin="round"></path>
+            </svg>
+				<div
+					style="display: flex; flex-direction: column; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; gap: 4px;">
+					<div
+						style="display: flex; justify-content: center; align-items: flex-start; align-self: stretch; flex-grow: 0; flex-shrink: 0; position: relative;">
+						<p
+							style="flex-grow: 0; flex-shrink: 0; font-size: 24px; font-weight: 600; text-align: center; color: #1e1e1e;">
+							계약서</p>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script src="./js/home/home.js"></script>
+</body>
+
+</html>

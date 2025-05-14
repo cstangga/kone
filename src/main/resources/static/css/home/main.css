@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+body{
+	position: relative;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 80px;
+    height: 100vh;
+    align-items: center;
+}
+
+.box_de {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.box_apply{
+    background: #1e1e1e;
+}
+
+.box_contract{
+    background: lightgrey;
+}
+
+a{
+	text-decoration: none;
+}

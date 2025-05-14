@@ -1,0 +1,48 @@
+@charset "EUC-KR";
+a{
+	text-decoration: none;
+}
+
+th, td {
+	text-align: center;
+}
+
+thead{
+	border-bottom:2px solid black;
+}
+
+tr{
+	height:48px;
+}
+
+pagination {
+	padding-top: 30px;
+}
+
+.pagination .page-link {
+	font-size: 0.8rem;
+	background-color: rgb(255, 255, 255); /* 버튼 배경색 검정 */
+	color: rgb(0, 0, 0); /* 텍스트 색상 흰색 */
+	border: none; /* 버튼 경계선 검정 */
+	margin: 0 7px; /* 버튼 간격 */
+	border-radius: 5px; /* 버튼 모서리를 둥글게 */
+	text-decoration: none; /* 기본 링크 스타일 제거 */
+}
+
+.pagination .page-link:hover {
+	background-color: gray; /* 호버 시 배경색 회색 */
+	color: white; /* 호버 시 텍스트 색상 유지 */
+}
+
+.pagination .active .page-link {
+	background-color: rgb(0, 0, 0); /* 활성화된 버튼 배경 흰색 */
+	color: rgb(255, 255, 255); /* 활성화된 버튼 텍스트 검정 */
+	border: 1px solid black; /* 활성화된 버튼 경계선 검정 */
+}
+
+.pagination .disabled .page-link {
+	background-color: #d3d3d3; /* 비활성화 버튼 배경 회색 */
+	color: #a0a0a0; /* 비활성화 버튼 텍스트 밝은 회색 */
+	pointer-events: none; /* 클릭 불가 처리 */
+	border: 1px solid #d3d3d3; /* 비활성화 버튼 경계선 */
+}

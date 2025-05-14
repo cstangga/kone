@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/fragments :: myhead}">
+</head>
+<link rel="stylesheet" href="/css/contract_form.css" />
+<body>
+
+	<article>
+
+		<nav th:if="${info.eType=='일반'}">
+			<button id="prevBtn" class="btn btn-light">로그아웃</button>
+			<button id="nextBtn" class="btn btn-light">다음▶</button>
+		</nav>
+
+		<nav th:if="${info.eType=='지사'}">
+			<button id="prevBtn" class="btn btn-light"
+				onclick="location.href='/logout'">로그아웃</button>
+			<button id="nextBtn" class="btn btn-danger" onclick="location.href='/download/pdf'">다운로드</button>
+		</nav>
+
+		<th:block th:if="${info.eType=='일반'}">
+			<section th:replace="~{/layout/form_info::contract_form}"></section>
+			<section th:replace="~{/layout/form_info::account_form}"></section>
+			<section th:replace="~{/layout/form_info::oath_form}"></section>
+		</th:block>
+
+		<th:block th:if="${info.eType=='지사'}">
+			<section th:replace="~{/layout/form_info::oath_form(display='1')}"></section>
+		</th:block>
+
+
+	</article>
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script th:if="${info.eType=='일반'}" src="../js/updateSection.js"></script>
+
+</body>
+</html>

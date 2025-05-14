@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/fragments :: myhead}"></head>
+
+<!-- CSRF 토큰 처리 방식 수정 -->
+<meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}" />
+<meta name="_csrf_header"
+	th:content="${_csrf != null ? _csrf.headerName : ''}" />
+
+<link rel="stylesheet" href="/css/admin/nav.css" />
+<link rel="stylesheet" href="/css/admin/applyDetail.css" />
+
+<body>
+	<div class="container mt-3">
+		<div th:if="${message}"
+			class="alert alert-success alert-dismissible fade show">
+			<span th:text="${message}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+		<div th:if="${error}"
+			class="alert alert-danger alert-dismissible fade show">
+			<span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+	</div>
+
+
+	<div class="container mt-4">
+		<ul th:replace="~{/layout/fragments::navbar(current='1')}"></ul>
+		<div
+			style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+			<div>
+				<button id="ppBtn" class="btn btn-sm btn-light">목록</button>
+			</div>
+			<!-- 선발 버튼 -->
+			<div th:if="${contract.selectionType == '미선발'}">
+				<button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+					data-bs-target="#selectionModal">선발</button>
+			</div>
+			<!-- 취소 버튼 추가 -->
+			<div th:if="${contract.selectionType == '선발'}">
+				<button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+					data-bs-target="#cancelModal">선발 취소</button>
+				<button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+					data-bs-target="#updateMember">수정</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body row g-4" style="padding: 30px 60px">
+				<div class="col-md-6">
+					<label class="form-label">이름</label> <input type="text"
+						class="form-control" disabled id="memberName"
+						th:value="${contract.name}" th:data-id="${contract.id}">
+				</div>
+				<div class="col-md-6">
+					<label class="form-label">연락처</label> <input type="text"
+						class="form-control" disabled
+						th:value=|${#strings.substring(contract.phoneNumber,0,3)}-${#strings.substring(contract.phoneNumber,3,7)}-${#strings.substring(contract.phoneNumber,7,11)}>
+				</div>
+				<div class="col-md-6">
+					<label class="form-label">주소</label> <input type="text"
+						class="form-control" disabled th:value="${contract.address}">
+				</div>
+				<div class="col-md-4">
+					<label class="form-label">희망근무지역</label> <input type="text"
+						class="form-control" disabled th:value="${contract.desiredArea}">
+				</div>
+				<div class="col-md-2">
+					<label class="form-label">구분</label> <input type="text"
+						class="form-control" disabled th:value="${contract.selectionType}">
+				</div>
+				<hr th:if="${contract.selectionType=='취소'}" style="margin-top: 35px; margin-bottom: 0" />
+				
+				<div th:if="${contract.selectionType=='취소'}" class="col-md-3">
+					<label class="form-label">취소일</label> 
+					<input type="text" class="form-control" disabled 
+						th:value="${cancel.createdTime != null ? #temporals.format(cancel.createdTime, 'yyyy년 MM월 dd일'):''}"
+					/>
+				</div>
+				<div th:if="${contract.selectionType=='취소'}" class="col-md-7">
+					<label class="form-label">취소사유</label> <input type="text"
+						class="form-control" disabled th:value="${cancel.reason!=null?cancel.reason:''}">
+				</div>
+				<div th:if="${contract.selectionType=='취소'}" class="col-md-2">
+					<label class="form-label">취소 상담사</label> <input type="text"
+						class="form-control" disabled th:value="${cancel.callName!=null? cancel.callName: '본인 취소'}">
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- 선발된 현장요원에게만 표시 -->
+	<div class="container mt-4"
+		th:if="${contract.selectionType == '선발' || contract.selectionType=='취소'}">
+		<div class="card mt-3">
+			<div
+				class="card-header d-flex justify-content-between align-items-center">
+				<span style="font-weight: 600; font-size: 22px;">근무일정</span>
+
+				<!-- 학교 검색 버튼 -->
+				<button th:if="${contract.selectionType=='선발'}" type="button"
+					class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+					data-bs-target="#schoolSearchModal">학교 검색</button>
+			</div>
+
+			<!-- 기존 근무일정 표시 -->
+			<ul th:if="${not #lists.isEmpty(contract.workingDays)}"
+				th:each="work : ${school}" class="list-group list-group-flush">
+				<li class="list-group-item d-flex justify-content-between"
+					style="padding-left: 40px; padding-right: 20px">
+					<div class="col-2" th:text="${work.area}"></div>
+					<div class="col-4" th:text="${work.schoolName}"></div>
+					<div class="col-3"
+						th:text="${#temporals.format(work.workingDate, 'MM월 dd일')}"></div>
+					<button th:if="${contract.selectionType=='선발'}"
+						class="delBtn btn btn-outline-danger btn-sm"
+						th:data-id="${work.wid}">취소</button>
+				</li>
+			</ul>
+			<div class="d-flex justify-content-center p-4"
+				style="font-weight: 600; font-size: 20px"
+				th:if="${school.size() == 0}">배정된 학교가 없습니다.</div>
+
+		</div>
+	</div>
+
+
+	<!-- 학교 검색 모달 -->
+	<div th:replace="~{layout/modals::seachSchoolModal}"></div>
+
+	<!-- 선발 선택 모달 -->
+	<div th:replace="~{layout/modals::selectModal}"></div>
+
+	<!-- 선발 취소 모달 -->
+	<div th:replace="~{layout/modals::cancelModal}"></div>
+
+	<!-- 현장요원 정보 수정 모달 -->
+	<div th:replace="~{/layout/modals::updateMember}"></div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script src="/js/applyDetail.js"></script>
+	<script src="/js/adminCancel.js"></script>
+		<!-- 주소 검색 API -->
+	<script
+		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</body>
+</html>

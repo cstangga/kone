@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{/layout/fragments :: myhead}"></head>
+<body>
+
+	<div class="container">
+		<div
+			class=" d-flex flex-column align-items-center justify-content-center"
+			style="height: 100vh">
+			<div class="card text-center" style="width: 70%">
+				<div class="card-header d-flex justify-content-center">
+					<b>지원 완료</b>
+				</div>
+				<div class="card-body">
+					<span
+						th:class="|mb-2 badge ${member.selectionType == '선발' ? 'bg-success' : 'bg-warning'}|"
+						th:text="${member.selectionType}"></span>
+					<h5 class="card-title mb-3">
+						<b><span th:text=${member.name}>이름</span>(<span
+							th:text="|${#strings.substring(member.phoneNumber,0,3)}-${#strings.substring(member.phoneNumber,3,7)}-${#strings.substring(member.phoneNumber,7,11)}|">연락처</span>)</b>
+					</h5>
+
+					<p
+						th:if="${member.submitType == null && member.selectionType == '미선발'}"
+						class="card-text" style="color: red">아직 현장요원으로 선발되지 않았습니다.</p>
+					<p
+						th:if="${member.submitType == null && member.selectionType == '선발'}"
+						class="card-text" style="color: red">계약서 작성 기간이 아닙니다.</p>
+					<p
+						th:if="${member.submitType != null && member.submitType == false}"
+						class="card-text" style="color: blue">계약서 작성 기간입니다.</p>
+					<p
+						th:if="${member.submitType != null && member.submitType == true}"
+						class="card-text" style="color: green">계약서 조회 기간입니다.</p>
+					<p
+						th:if="${member.selectionType=='취소'}"
+						class="card-text" style="color: orange">지원이 정상적으로 취소되었습니다.</p>
+					<div class="d-flex justify-content-center gap-2 mt-4">
+						<a th:if="${member.submitType != null && member.submitType == false}" href="/contracts/create" class="btn btn-outline-primary btn-sm" style="width: 150px">계약서 작성</a>
+						<a href="/contracts/contract_info" class="btn btn-outline-success btn-sm" th:if="${member.submitType != null && member.submitType == true}" style="width: 150px">계약서 조회</a>
+						<a data-bs-toggle="modal" data-bs-target="#cancelSelfModal" th:if="${member.selectionType=='미선발'}" class="btn btn-outline-danger btn-sm" style="width: 150px">지원 취소</a> 
+						<a href="/logout" class="btn btn-outline-secondary btn-sm" style="width: 150px">로그아웃</a>
+					</div>
+				</div>
+				<div class="card-footer text-body-secondary">
+					<b>문의 사항 : 1600-4312</b>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 선발 선택 모달 -->
+	<div th:replace="~{layout/modals::cancelSelfModal}"></div>
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script src="../js/statusCancel.js"></script>
+</body>
+</html>

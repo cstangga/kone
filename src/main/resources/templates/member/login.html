@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{/layout/fragments :: myhead}"></head>
+
+<link rel="stylesheet" href="../css/member/login.css" />
+<body>
+	<div class="container">
+		<div class="box">
+			<div class="card-body">
+				<form method="post">
+					 <label for="name" class="form-label">이름</label>
+	 				 <input type="text" class="form-control" id="name" name="password" placeholder="이름을 입력해주세요." required>
+	 				 
+	 				 <label for="phoneNumber" class="form-label">휴대폰 번호</label>
+	 				 <input type="text" class="form-control" id="phoneNumber"  name="username" placeholder="'-'를 제외하고 번호를 입력해주시기 바랍니다." required>
+	 				 <div class="d-flex gap-4">
+	    			<button type="submit" class="submitBtn btn btn-dark">로그인</button>
+	    			<button class="submitBtn btn btn-secondary" onclick="location.href='/'">취소</button>
+	 				 </div>
+	    		</form>
+	    		<div class="errorBox" th:if="${param.error}">
+				    <p class="text-danger">잘못된 사용자 이름 또는 비밀번호입니다.</p>
+				</div>
+  			</div>
+		</div>
+	</div>
+<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/fragments :: myhead}"></head>
+
+<link rel="stylesheet" href="/css/admin/nav.css" />
+<link rel="stylesheet" href="/css/admin/detail.css" />
+<link rel="stylesheet" href="/css/contract_form.css" />
+
+<body>
+	<div class="container">
+		<ul th:replace="~{/layout/fragments::navbar(current='2')}"></ul>
+
+		<!--  -->
+		<section class="header">
+			<div class="btns" th:if="${info.eType=='일반'}">
+				<button id="prevBtn" class="btn btn-light">목록</button>
+				<button id="nextBtn" class="btn btn-light">다음▶</button>
+			</div>
+			<div class="btns" th:if="${info.eType=='지사'}">
+				<button id="homeBtn" class="btn btn-light">목록</button>
+			</div>
+
+			<div class="member_info">
+				<div>
+					<label>이름</label> <input class="input_box" type="text"
+						th:value="${info.name}" disabled />
+				</div>
+				<div>
+					<label>연락처</label> <input class="input_box" type="text"
+						th:value="|${#strings.substring(info.phoneNumber,0,3)}-${#strings.substring(info.phoneNumber,3,7)}-${#strings.substring(info.phoneNumber,7,11)}"
+						disabled />
+				</div>
+				<input type="hidden" id="member_id" th:value=${info.id} />
+			</div>
+		</section>
+
+
+
+		<div class="contractDetail">
+
+			<article>
+				<th:block th:if="${info.eType=='일반'}">
+					<section th:replace="~{/layout/form_info::contract_form}"></section>
+					<section th:replace="~{/layout/form_info::account_form}"></section>
+					<section th:replace="~{/layout/form_info::oath_form}"></section>
+				</th:block>
+
+				<th:block th:if="${info.eType=='지사'}">
+					<section th:replace="~{/layout/form_info::oath_form(display='1')}"></section>
+				</th:block>
+			</article>
+
+		</div>
+
+		<div th:replace="~{/layout/modals::updateModal}"></div>
+
+
+		<footer
+			class="container d-flex flex-row fixed-bottom justify-content-end pb-5">
+			<button id="updateBtn" class="btn btn-outline-info"
+				th:if="${info.eType=='일반'}">수정</button>
+			<button id="unsubBtn" class="btn btn-outline-danger">미제출</button>
+		</footer>
+	</div>
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script th:if="${info.eType=='일반'}" src="../../js/contractDetail.js"></script>
+	<script src="../../js/unsubmit.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+@charset "EUC-KR";
+		
+        .container{
+			display: flex;
+			justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            height: 100vh;
+		}
+
+        .box {
+			display: flex;
+            border: 1px solid #ccc; /* 회색 선 */
+            border-radius: 10px; /* 둥근 모서리 */
+            padding: 50px; /* 패딩 */
+            background-color: white; /* 카드 배경 색상 */
+            width: 800px; /* 카드 너비 */
+        }
+        .form-label{
+			 margin-top: 10px;
+			 font-size: 1.2rem; /* 글씨 크기 */
+             font-weight: bold; 
+		}
+		.form-control{
+			font-size: 1.2rem;
+		}
+		.submitBtn{
+			margin-top: 10px;
+			display: flex;
+			font-size: 1.2rem;
+			width: 100%;	
+			display: flex;
+			justify-content: center;
+		}
+		.errorBox{
+			margin-top:10px;
+			font-weight: bold;
+			font-size:1rem;
+		}

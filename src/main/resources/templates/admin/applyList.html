@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/fragments :: myhead}"></head>
+
+
+<link rel="stylesheet" href="/css/admin/contract_list.css" />
+<link rel="stylesheet" href="/css/admin/nav.css" />
+
+<body>
+	<div class="container">
+		<ul th:replace="~{/layout/fragments::navbar(current='1')}"></ul>
+
+		<form id="searchForm" class="position-relative m-3 pt-4">
+			<input id="keyword" name="keyword" placeholder="이름/ 연락처/ 희망근무지역으로 검색"
+				type="text" maxlength="100"
+				th:value="${keyword == null ? '' : keyword}"
+				style="width: 100%; border-radius: 30px; border: 1px solid rgb(211, 211, 211); padding: 12px; padding-left: 30px; padding-right: 70px;" />
+			<button id="searchBtn" class="icon position-absolute"
+				style="bottom: 4px; right: 30px; border: none; background-color: white; padding: 5px">
+				<i class="bi bi-search" style="color: #808080; font-size: 22px;"></i>
+			</button>
+		</form>
+		<!-- 필터링 버튼 -->
+		<div class="mx-3 mb-3 d-flex justify-content-between">
+			<div class="d-flex gap-2">
+				<button id="all" class="btn btn-outline-primary btn-sm">전체</button>
+				<button id="sele" class="btn btn-outline-success btn-sm">선발</button>
+				<button id="unse" class="btn btn-outline-warning btn-sm">미선발</button>
+				<button id="canc" class="btn btn-outline-danger btn-sm">취소</button>
+			</div>
+			<div>
+			<!-- 선발 버튼에서만 취소자가 보이게 하기 -->
+				<!-- <button class="btn btn-sm btn-danger">선발 취소</button>  -->
+			</div>
+		</div>
+
+		<!-- 현장요원 목록 테이블 -->
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>지원 날짜</th>
+					<th>이름</th>
+					<th>연락처</th>
+					<th>희망근무지역</th>
+					<th>상태</th>
+					<th>상세보기</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="contract, stat : ${contracts}"
+					th:if="${contract.name!='time'}">
+					<td th:text="${stat.count + currentPage * 10}" class="col-1"></td>
+					<td
+						th:text="${#temporals.format(contract.createdTime, 'yyyy-MM-dd HH:mm')}"
+						class="col-2"></td>
+					<td th:text="${contract.name}" class="col-2"></td>
+					<td class="col-2"
+						th:text="|${#strings.substring(contract.phoneNumber,0,3)}-${#strings.substring(contract.phoneNumber,3,7)}-${#strings.substring(contract.phoneNumber,7,11)}|"></td>
+					<td th:text="${contract.desiredArea}" class="col-2"></td>
+					<td class="col-1"><span th:text="${contract.selectionType}"
+						th:class="${contract.selectionType == '선발' ? 'badge bg-success' : 
+                                        contract.selectionType == '미선발' ? 'badge bg-warning' : 
+                                        'badge bg-danger'}">
+					</span></td>
+					<td><a th:href="@{/admin/apply/{id}(id=${contract.id})}"
+						class="btn btn-secondary btn-sm">보기</a></td>
+				</tr>
+				<!-- 데이터가 없을 경우 메시지 출력 -->
+				<tr th:if="${contracts.content.size() == 0}">
+					<td colspan="7"
+						style="padding: 30px 0; text-align: center; font-weight: bold; color: gray;">사용자가
+						존재하지 않습니다.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- 페이징 -->
+	<div th:if="${contracts.content.size() > 0}"
+		class="fixed-bottom d-flex justify-content-center mb-4">
+		<nav aria-label="Page navigation">
+			<ul class="pagination">
+				<li class="page-item"
+					th:classappend="${contracts.hasPrevious()} ? '' : 'disabled'">
+					<button id="prevBtn" class="page-link"
+						th:data-id="${currentPage - 1}" aria-label="Previous">이전</button>
+				</li>
+				<li class="page-item"
+					th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+					th:classappend="${i == currentPage} ? 'active' : ''"><button
+						th:data-id=${i} class="page-link numBtn" th:text="${i + 1}">1</button></li>
+				<li class="page-item"
+					th:classappend="${contracts.hasNext()} ? '' : 'disabled'">
+					<button id="nextBtn" th:data-id="${currentPage + 1}"
+						class="page-link" aria-label="Next">다음</button>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../../js/applyList.js"></script>
+</body>
+
+</html>

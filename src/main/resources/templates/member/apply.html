@@ -26,7 +26,7 @@
 			</div>
 		</section>
 
-		<form id="applyform" th:action=@{/member/apply} method="POST"
+		<form id="applyform" th:action=@{/member/apply} th:object="${memberRequestDTO}" method="POST"
 			class="main_content">
 			<dl>
 				<dt>1. 성명</dt>
@@ -34,14 +34,25 @@
 					<input class="form-control" type="text" name="name" id="name"
 						maxlength="20" placeholder="이름을 입력해주세요." required />
 				</dd>
-				<dt>2. 연락처</dt>
+
+				<!-- 20250515 은비 수정-->
+				<dt>2. 주민등록번호</dt>
 				<dd>
-					<input class="form-control" type="text" name="phonenumber"
-						id="phonenumber" maxlength="11"
+					<input class="form-control" type="text" th:field="*{jumin1}" maxlength="6" placeholder="앞 6자리" required
+						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:100px; display:inline-block;" />
+					-
+					<input class="form-control" type="password" th:field="*{jumin2}" maxlength="7" placeholder="뒤 7자리" required
+						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:110px; display:inline-block;" />
+				</dd>
+
+				<dt>3. 연락처</dt>
+				<dd>
+					<input class="form-control" type="text" name="phoneNumber"
+						id="phoneNumber" maxlength="11"
 						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
 						placeholder="휴대폰번호를 입력해주세요.( - 없이 번호만 입력)" required />
 				</dd>
-				<dt>3. 지역</dt>
+				<dt>4. 지역</dt>
 				<dd class="subtitle">현 거주 지역을 선택해 주세요.</dd>
 				<dd>
 					<select class="form-select" name="desiredArea" id="desiredArea">
@@ -65,7 +76,7 @@
 						<option value="충청남도">충청남도</option>
 					</select>
 				</dd>
-				<dt>4. 주소</dt>
+				<dt>5. 주소</dt>
 				<dd class="subtitle">현 거주지 주소를 입력해주세요.</dd>
 				<dd>
 					<input class="form-control" type="text"

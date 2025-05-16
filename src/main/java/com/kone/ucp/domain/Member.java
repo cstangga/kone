@@ -35,9 +35,13 @@ public class Member extends BaseTimeEntity {
 	
 	@Basic(optional=false)
 	private String name;	//이름 -> 아이디 역할
-	
+
+	// 250514 은비 수정
 	@Basic(optional=false)
-	private String phoneNumber;		//연락처 -> 비밀번호 역할(암호화 비밀번호)
+	@Column(nullable = false, unique = true)
+	private String residentNumber; // 주민등록번호 -> 비밀번호 역할(암호화 비밀번호)
+
+	private String phoneNumber;		//연락처
 	
 	@Builder.Default
 	@ToString.Exclude 
@@ -59,8 +63,6 @@ public class Member extends BaseTimeEntity {
 	
 	//241214 선희 코드 수정
 	private Boolean submitType; // 계약서 제출구분(null[폼 등록 전],false[미제출], true[제출])
-
-	private String residentNumber; // 주민번호
 
 	private String accountNumber; // 계좌번호
 

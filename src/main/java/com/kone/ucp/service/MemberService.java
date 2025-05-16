@@ -33,16 +33,17 @@ public class MemberService implements UserDetailsService {
 	private final ImageRepo imgDao;
 	private final CancelRepository cancelDao;
 
+	// 20250516 은비 코드 수정
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// MemberRepository의 메서드를 호출해서 username(휴대폰번호)이 일치하는 사용자 정보가 있는 지를 리턴. 만약 사용자
+		// MemberRepository의 메서드를 호출해서 username(주민등록번호)이 일치하는 사용자 정보가 있는 지를 리턴. 만약 사용자
 		// 정보가 없으면
 		// exception을 던짐.
 
 		log.info("loadUserByUsername(username={})", username);
 
-		// 휴대폰 번호로 사용자 검색
-		Optional<Member> opt = memberDao.findByPhoneNumber(username);
+		// 주민등록번호로 사용자 검색
+		Optional<Member> opt = memberDao.findByResidentNumber(username);
 
 		if (opt.isPresent()) {
 			Member member = opt.get();
@@ -54,12 +55,12 @@ public class MemberService implements UserDetailsService {
 		}
 
 	}
-
-	public Member findByNameAndPhoneNumber(String name, String phoneNumber) {
-
-		log.info("Received username: {}, password: {}", name, phoneNumber);
-		return memberDao.findByNameAndPhoneNumber(name, phoneNumber).orElse(null);
+	
+	// 20250515 은비 코드 수정
+	public Member findByNameAndResidentNumber(String name, String residentNumber) {
+		return memberDao.findByNameAndResidentNumber(name, residentNumber).orElse(null);
 	}
+
 
 	/**
 	 * Member 정보 저장
@@ -69,7 +70,7 @@ public class MemberService implements UserDetailsService {
 	 */
 	public boolean insertMember(Member m) {
 		boolean result = false;
-		if (!memberDao.existsByPhoneNumber(m.getPhoneNumber())) {
+		if (!memberDao.existsByResidentNumber(m.getResidentNumber())) {
 			result = true;
 			m.addRole(EmpType.USER);
 			memberDao.save(m);

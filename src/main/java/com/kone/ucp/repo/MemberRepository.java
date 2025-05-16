@@ -54,14 +54,17 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	Page<Member> findByEmpTypeInAndSelectionType(List<EmpType> empType, String selectionType, Pageable pageable);
 
 	@EntityGraph(attributePaths = "empType")
-	Optional<Member> findByPhoneNumber(String phoneNumber);
-
-	@EntityGraph(attributePaths = "empType")
 	Optional<Member> findByName(String name);
 
-	Optional<Member> findByNameAndPhoneNumber(String name, String phoneNumber);
+	// 20250516 은비 코드 추가
+	@EntityGraph(attributePaths = "empType")
+	Optional<Member> findByResidentNumber(String residentNumber);
 
-	boolean existsByPhoneNumber(String phoneNumber);
+	// 20250515 은비 코드 추가
+	Optional<Member> findByNameAndResidentNumber(String name, String residentNumber);
+	// 주민등록번호로 중복 조회
+	boolean existsByResidentNumber(String residentNumber);
+
 
 	@Query("select m from Member m where m.selectionType like :select and ("
 			+ "m.name like %:name% or m.phoneNumber like %:phoneNumber% or m.desiredArea like %:desiredArea% "

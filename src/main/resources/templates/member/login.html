@@ -1,20 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/layout/fragments :: myhead}"></head>
+
 
 <link rel="stylesheet" href="../css/member/login.css" />
 <body>
 	<div class="container">
 		<div class="box">
 			<div class="card-body">
-				<form method="post">
+				<form method="post" onsubmit="return combineJumin();">
 					 <label for="name" class="form-label">이름</label>
 	 				 <input type="text" class="form-control" id="name" name="password" placeholder="이름을 입력해주세요." required>
-	 				 
-	 				 <label for="phoneNumber" class="form-label">휴대폰 번호</label>
-	 				 <input type="text" class="form-control" id="phoneNumber"  name="username" placeholder="'-'를 제외하고 번호를 입력해주시기 바랍니다." required>
-	 				 <div class="d-flex gap-4">
-	    			<button type="submit" class="submitBtn btn btn-dark">로그인</button>
+
+					<!-- 20250516 은비 수정-->
+					<!-- 주민등록번호 앞/뒤 나눠 입력 -->
+					<label for="jumin1" class="form-label">주민등록번호</label>
+					<input type="text" id="jumin1" name="jumin1" maxlength="6" placeholder="앞 6자리" required> -
+					<input type="password" id="jumin2" name="jumin2" maxlength="7" placeholder="뒤 7자리" required>
+
+					<!-- 실제로 Spring Security에 전달될 username -->
+					<input type="hidden" id="username" name="username">
+
+					<button type="submit" class="submitBtn btn btn-dark">로그인</button>
 	    			<button class="submitBtn btn btn-secondary" onclick="location.href='/'">취소</button>
 	 				 </div>
 	    		</form>
@@ -24,6 +31,22 @@
   			</div>
 		</div>
 	</div>
-<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+	<script>
+		function combineJumin() {
+            const j1 = document.getElementById("jumin1").value.trim();
+            const j2 = document.getElementById("jumin2").value.trim();
+
+            if (j1.length !== 6 || j2.length !== 7) {
+                alert("주민등록번호를 정확히 입력해주세요.");
+                return false;
+            }
+
+            document.getElementById("username").value = j1 + '-' + j2;
+
+            return true;
+        }
+	</script>
+
+	<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
 </body>
 </html>

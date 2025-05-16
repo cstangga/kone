@@ -1,5 +1,6 @@
 package com.kone.ucp.web;
 
+import com.kone.ucp.dto.MemberRequestDTO;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,44 +35,58 @@ public class MemberController {
 
 	}
 
+	// 20250516 은비 코드 수정
 	@PostMapping("/login")
-	public String loginProcess(@RequestParam("username") String name, @RequestParam("password") String phoneNumber) {
+	public String loginProcess(@RequestParam("username") String name,
+							   @RequestParam("jumin1") String jumin1,
+							   @RequestParam("jumin2") String jumin2) {
 
-		log.info("Post-login() 호출 ");
-		Member member = memberSvc.findByNameAndPhoneNumber(name, phoneNumber);
+		log.info("Post-login() 호출");
+		log.info("입력된 이름: {}", name);
+		log.info("입력된 주민등록번호 앞자리: {}", jumin1);
+		log.info("입력된 주민등록번호 뒷자리: {}", jumin2);
+
+		String residentNumber = jumin1 + "-" + jumin2;
+
+		Member member = memberSvc.findByNameAndResidentNumber(name, residentNumber);
 
 		if (member != null) {
-			log.info("member name={}, member auth={}",member.getName(),member.getEmpType());
-			if (member.getEmpType().contains(EmpType.ADMIN)) {
-				log.info("어드민 로그인 성공");
-				return "redirect:/adminHome"; // 관리자 페이지로 이동
+			log.info("로그인 성공: {}", member.getName());
 
+			if (member.getEmpType().contains(EmpType.ADMIN)) {
+				return "redirect:/adminHome";
 			} else if (member.getEmpType().contains(EmpType.USER)) {
-				if (member.isSubmitType()) {
-					return "redirect:/contract"; // 계약서 페이지로 이동
-				} else {
-					log.info("사용자 로그인이 실패했습니다: SubmitType이 false입니다.");
-					return "member/login"; // 경고 메시지와 함께 로그인 페이지로 반환
-				}
+				return member.isSubmitType() ? "redirect:/contract" : "member/login";
 			}
 		}
 
-		log.info("로그인 실패: 사용자 이름 또는 비밀번호 불일치.");
-		return "redirect:/member/login?error=true"; // 로그인 페이지에 회원가입 모달 표시
+		log.info("로그인 실패: 이름 또는 주민등록번호 불일치");
+		return "redirect:/member/login?error=true";
 	}
 
+	// 20250515 은비 코드 수정
 	// 회원가입 및 현장요원 지원 폼으로 이동
 	@GetMapping("/apply")
-	public void getApply() {
+	public String getApply(Model model) {
 		log.info("GET : 현장요원 지원 폼");
+		model.addAttribute("memberRequestDTO", new MemberRequestDTO());
+		return "member/apply";
 	}
 
+	// 20250515 은비 코드 수정
 	// 회원가입 및 현장요원 정보 저장
 	@PostMapping("/apply")
-	public String postApply(@ModelAttribute("name") String name, @ModelAttribute("phonenumber") String phonenumber,
-			@ModelAttribute("desiredArea") String desiredArea, @ModelAttribute("address") String address) {
+	public String postApply(@ModelAttribute MemberRequestDTO dto) {
 
-		Member m = Member.builder().name(name).phoneNumber(phonenumber).desiredArea(desiredArea).address(address)
+		// 주민등록번호 앞6자리 + 뒤7자리 조합
+		String fullJumin = dto.getJumin1() + "-" + dto.getJumin2();
+
+		Member m = Member.builder()
+				.name(dto.getName())
+				.phoneNumber(dto.getPhoneNumber())
+				.desiredArea(dto.getDesiredArea())
+				.address(dto.getAddress())
+				.residentNumber(fullJumin)  // 조합된 주민번호 사용
 				.build();
 
 		if (!memberSvc.insertMember(m)) {

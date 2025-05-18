@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layout/fragments :: myhead}"></head>
+
+
+<link rel="stylesheet" href="/css/admin/contract_list.css" />
+<link rel="stylesheet" href="/css/admin/nav.css" />
+
+<body>
+<div class="container">
+    <ul th:replace="~{/layout/fragments::navbar(current='3')}"></ul>
+    <a th:href="@{/admin/schoolRegisterForm}">학교 등록 및 수정</a>
+
+    <!-- 현장요원 목록 테이블 -->
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>지역</th>
+            <th>학교</th>
+            <th>주소</th>
+            <th>시험 날짜</th>
+            <th>현장요원</th>
+            <th>요원 전화번호</th>
+            <th>학교 책임자</th>
+            <th>책임자 번호</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="school, stat : ${schoolList}" th:if="${!#lists.isEmpty(schoolList)}">
+            <td th:text="${school.area}"></td>
+            <td>
+                <a th:href="@{/admin/schoolDetail/{id}(id=${school.schoolId})}" th:text="${school.schoolName}"></a>
+            </td>
+            <td th:text="${school.schoolAddress}"></td>
+            <td th:text="${#temporals.format(school.testDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${school.agent != null and school.agent.name != null ? school.agent.name : ''}"></td>
+            <td th:text="${school.agent != null and school.agent.phoneNumber != null ? school.agent.phoneNumber : ''}"></td>
+            <td th:text="${school.schoolAdminName}"></td>
+            <td th:text="${school.schoolAdminPhoneNumber}"></td>
+
+        </tr>
+        <!-- 데이터가 없을 경우 메시지 출력 -->
+        <tr th:if="${#lists.isEmpty(schoolList)}">
+            <td colspan="8"
+                style="padding: 30px 0; text-align: center; font-weight: bold; color: gray;">
+                등록된 학교가 없습니다.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 페이징 -->
+<!--<div th:if="${contracts.content.size() > 0}"-->
+<!--     class="fixed-bottom d-flex justify-content-center mb-4">-->
+<!--    <nav aria-label="Page navigation">-->
+<!--        <ul class="pagination">-->
+<!--            <li class="page-item"-->
+<!--                th:classappend="${contracts.hasPrevious()} ? '' : 'disabled'">-->
+<!--                <button id="prevBtn" class="page-link"-->
+<!--                        th:data-id="${currentPage - 1}" aria-label="Previous">이전</button>-->
+<!--            </li>-->
+<!--            <li class="page-item"-->
+<!--                th:each="i : ${#numbers.sequence(0, totalPages - 1)}"-->
+<!--                th:classappend="${i == currentPage} ? 'active' : ''"><button-->
+<!--                    th:data-id=${i} class="page-link numBtn" th:text="${i + 1}">1</button></li>-->
+<!--            <li class="page-item"-->
+<!--                th:classappend="${contracts.hasNext()} ? '' : 'disabled'">-->
+<!--                <button id="nextBtn" th:data-id="${currentPage + 1}"-->
+<!--                        class="page-link" aria-label="Next">다음</button>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</div>-->
+
+
+<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../../js/schoolList.js"></script>
+</body>
+
+</html>

@@ -65,6 +65,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	// 주민등록번호로 중복 조회
 	boolean existsByResidentNumber(String residentNumber);
 
+	// 최창욱 코드 추가
+	boolean existsByPhoneNumber(String phoneNumber);
+
 
 	@Query("select m from Member m where m.selectionType like :select and ("
 			+ "m.name like %:name% or m.phoneNumber like %:phoneNumber% or m.desiredArea like %:desiredArea% "

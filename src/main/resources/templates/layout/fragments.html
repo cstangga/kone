@@ -21,12 +21,18 @@
 			<a href="/logout" class="btn btn-outline-secondary btn-sm">로그아웃</a>
 		</div>
 		<ul class="nav" style="justify-content: center;">
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item">
+				<a class="nav-link"
 				th:classappend="${current == '1'} ? active" aria-current="page"
 				th:href="@{/admin/apply/list}">지원 관리</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item">
+				<a class="nav-link"
 				th:classappend="${current == '2'} ? active"
 				th:href="@{/admin/contract/list}">계약서 관리</a></li>
+			<li class="nav-item">
+				<a class="nav-link"
+				   th:classappend="${current == '3'} ? active"
+				   th:href="@{/admin/school/list}">학교 관리</a></li>
 		</ul>
 	</div>
 

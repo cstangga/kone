@@ -4,13 +4,7 @@ import com.kone.ucp.dto.MemberRequestDTO;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.kone.ucp.domain.EmpType;
 import com.kone.ucp.domain.Member;
@@ -19,6 +13,9 @@ import com.kone.ucp.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -114,4 +111,32 @@ public class MemberController {
 		model.addAttribute("member", m);
 		
 	}
+
+	// 주민번호 중복 체크
+	@ResponseBody
+	@GetMapping("/checkRegidentNumberDuplicate")
+	public Map<String, Boolean> checkResidentNumberDuplicate(@RequestParam String jumin1,
+															 @RequestParam String jumin2) {
+		log.info("GET - jumin1 = {}, jumin2= {}",jumin1,jumin2);
+		String fullResidentNumber = jumin1 +"-"+ jumin2;
+		boolean exists = memberSvc.existsByResidentNumber(fullResidentNumber);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("duplicate", exists);
+		return response;
+	}
+
+	// 전화번호 중복 체크
+	@ResponseBody
+	@GetMapping("/checkPhoneNumberDuplicate")
+	public Map<String, Boolean> checkPhoneNumberDuplicate(@RequestParam String phoneNumber) {
+		log.info("GET = phoneNumber = {}",phoneNumber);
+
+		boolean exists = memberSvc.existsByPhoneNumber(phoneNumber);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("duplicate", exists);
+		return response;
+	}
+
 }

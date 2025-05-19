@@ -3,6 +3,8 @@ package com.kone.ucp.web;
 import java.util.List;
 import java.util.Map;
 
+import com.kone.ucp.dto.SchoolDto;
+import com.kone.ucp.service.SchoolService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminController {
 
 	private final SchoolRepository schoolRepo;
+	private final SchoolService schoolSvc;
 	private final ContractService contractSvc;
 
 	// admim/contractList.html -> 비용과 함께 계약서 폼 등록을 허용함.
@@ -187,4 +190,56 @@ public class AdminController {
 		
 		return "redirect:/admin/apply/list";
 	}
+
+	// 최창욱 /  학교 리스트 화면 호출
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/school/list")
+	public String schoolList(Model model){
+		log.info("GET - 학교 리스트");
+		List<SchoolDto> schoolDtoList = schoolSvc.findAll();
+		log.info("schoolList = {}",schoolDtoList);
+		model.addAttribute("schoolList",schoolDtoList);
+		return "/admin/schoolList";
+	}
+
+	// 최창욱 /  학교 등록 폼 화면 호출
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/schoolRegisterForm")
+	public void schoolRegisterForm(){
+		log.info("GET - 학교 리스트");
+	}
+
+	@PostMapping("/schoolRegister")
+	public String schoolRegister(@ModelAttribute SchoolDto schoolDto){
+		log.info("POST - 학교 등록");
+		log.info("schoolDto = {} ",schoolDto);
+		schoolSvc.save(schoolDto);
+		return "redirect:/admin/school/list";
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/schoolDetail/{id}")
+	public String schoolDetail(@PathVariable("id") Long id, Model model) {
+		log.info("GET - 학교 자세히 / id = {}", id);
+		SchoolDto schoolDto = schoolSvc.findById(id);
+		log.info("schoolDto = {}", schoolDto);
+		model.addAttribute("schoolDto", schoolDto);
+		return "admin/schoolDetail";
+	}
+
+	@PostMapping("/schoolDelete/{id}")
+	public String schoolDelete(@PathVariable("id") Long id){
+		log.info("POST - 학교 삭제");
+		schoolSvc.delete(id);
+		return "/admin/schoolList";
+	}
+
+	@PostMapping("/schoolUpdate")
+	public String schoolUpdate(@ModelAttribute SchoolDto schoolDto){
+		log.info("POST - 학교 정보 업데이트");
+		log.info("schoolDto = {}",schoolDto);
+		schoolSvc.update(schoolDto);
+		return "/admin/schoolList";
+	}
+
 }

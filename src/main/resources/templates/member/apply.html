@@ -43,6 +43,8 @@
 					-
 					<input class="form-control" type="password" th:field="*{jumin2}" maxlength="7" placeholder="뒤 7자리" required
 						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:110px; display:inline-block;" />
+					<button type="button" id="checkResidentNumberDuplicateBtn">중복확인</button>
+
 				</dd>
 
 				<dt>3. 연락처</dt>
@@ -51,6 +53,7 @@
 						id="phoneNumber" maxlength="11"
 						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
 						placeholder="휴대폰번호를 입력해주세요.( - 없이 번호만 입력)" required />
+					<button type="button" id="checkPhoneNumberDuplicateBtn">중복확인</button>
 				</dd>
 				<dt>4. 지역</dt>
 				<dd class="subtitle">현 거주 지역을 선택해 주세요.</dd>
@@ -87,7 +90,7 @@
 			<div class="d-flex gap-3">
 				<button id="btnSubmit" class="btn btn-outline-success">지원</button>
 				<button id="btnBack" class="btn btn-outline-secondary"
-					th:onclick="location.href='/'">취소</button>
+					th:onclick="location.href='/'" type="button">취소</button>
 			</div>
 		</form>
 	</div>

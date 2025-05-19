@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/fragments :: myhead}">
+</head>
+<link rel="stylesheet" href="/css/admin/nav.css" />
+<link rel="stylesheet" href="../css/admin/schoolRegisterForm.css" /><body>
+
+<div class="main_box">
+    <section class="main_header">학교 등록</section>
+
+    <form id="schoolRegisterForm" th:action="@{/admin/schoolRegister}" method="POST" class="main_content">
+        <dl>
+            <dt>1. 지역</dt>
+            <dd>
+                <select class="form-select" name="area" required>
+                    <option disabled selected hidden>지역을 선택해주세요.</option>
+                    <option value="서울특별시">서울특별시</option>
+                    <option value="경기도">경기도</option>
+                    <option value="인천광역시">인천광역시</option>
+                    <option value="부산광역시">부산광역시</option>
+                    <option value="대전광역시">대전광역시</option>
+                    <option value="광주광역시">광주광역시</option>
+                    <option value="대구광역시">대구광역시</option>
+                    <option value="울산광역시">울산광역시</option>
+                    <option value="세종특별자치시">세종특별자치시</option>
+                    <option value="제주특별자치도">제주특별자치도</option>
+                    <option value="강원도">강원도</option>
+                    <option value="경상북도">경상북도</option>
+                    <option value="경상남도">경상남도</option>
+                    <option value="전라북도">전라북도</option>
+                    <option value="전라남도">전라남도</option>
+                    <option value="충청북도">충청북도</option>
+                    <option value="충청남도">충청남도</option>
+                </select>
+            </dd>
+
+            <dt>2. 학교 이름</dt>
+            <dd>
+                <input class="form-control" type="text" name="schoolName"  placeholder="학교 이름을 입력해주세요" required />
+            </dd>
+
+            <dt>3. 학교 주소</dt>
+            <dd>
+                <input class="form-control" type="text" name="schoolAddress" id="schoolAddress" placeholder="학교 주소를 입력해주세요" required readonly />
+                <button type="button" onclick="searchAddress()">주소 검색</button>
+            </dd>
+
+            <dt>4. 감독 선생님 이름</dt>
+            <dd>
+                <input class="form-control" type="text" name="schoolAdminName" placeholder="감독 선생님 이름" required />
+            </dd>
+
+            <dt>5. 감독 선생님 전화번호</dt>
+            <dd>
+                <input class="form-control" type="text" name="schoolAdminPhoneNumber" maxlength="11"
+                       placeholder="전화번호 (- 없이 숫자만)" required
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+            </dd>
+
+            <dt>6. 테스트 날짜</dt>
+            <dd>
+                <input class="form-control" type="datetime-local" name="testDate" required />
+            </dd>
+        </dl>
+
+        <div class="d-flex">
+            <button class="btn btn-outline-primary" type="submit">등록</button>
+            <button class="btn btn-outline-secondary" type="button" th:onclick="|location.href='@{/admin/school/list}'|">취소</button>
+        </div>
+    </form>
+</div>
+
+<!-- 주소 검색 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function searchAddress() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                document.getElementById("schoolAddress").value = data.address;
+            }
+        }).open();
+    }
+</script>
+
+<script th:replace="~{/layout/fragments :: bootstrap_js}"></script>
+</body>
+</html>

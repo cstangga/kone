@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+/* 전체 레이아웃 */
+body {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 40px;
+    background-color: #f8f9fa;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 폼 박스 스타일 */
+.main_box {
+    width: 100%;
+    max-width: 720px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 제목 */
+.main_header {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    margin-bottom: 24px;
+}
+
+/* 폼 내부 레이아웃 */
+.main_content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 제목/항목 구역 */
+dl {
+    width: 100%;
+}
+
+dt {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    color: #212529;
+}
+
+dd {
+    margin: 0;
+}
+
+/* 입력창, 셀렉트 박스 */
+input.form-control,
+select.form-select {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-in-out;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #0d6efd;
+}
+
+/* 주소 검색 버튼 */
+button[type="button"] {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: white;
+    border: 1px solid #0d6efd;
+    border-radius: 6px;
+    color: #0d6efd;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+button[type="button"]:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* 버튼 구역 */
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.d-flex .btn {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    white-space: nowrap;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* 등록 버튼 */
+.btn-outline-primary {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+    background-color: white;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* 취소 버튼 */
+.btn-outline-secondary {
+    color: #6c757d;
+    border: 1px solid #6c757d;
+    background-color: white;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}

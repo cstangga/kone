@@ -166,4 +166,14 @@ public class MemberService implements UserDetailsService {
 		Cancel c = Cancel.builder().member(m).reason(reason).build();
 		cancelDao.save(c);
 	}
+
+	public boolean existsByResidentNumber(String residentNumber) {
+		log.info("memberService / residentNumber = {}",residentNumber);
+		return memberDao.existsByResidentNumber(residentNumber);
+	}
+
+	public boolean existsByPhoneNumber(String phoneNumber) {
+		log.info("memberService / phoneNumber = {}",phoneNumber);
+		return memberDao.existsByPhoneNumber(phoneNumber);
+	}
 }

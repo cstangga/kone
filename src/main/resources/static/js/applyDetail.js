@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	function searchSchools(keyword) {
-		const url = `/admin/search${keyword ? '?keyword=' + encodeURIComponent(keyword) : ''}`;
+		const url = `/admin/search?keyword=${encodeURIComponent(keyword)}`;
 
 		fetch(url)
 			.then(response => {
@@ -52,8 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				schoolTableBody.innerHTML = ''; // 테이블 초기화 (기존 데이터 삭제)
 
 				schools.forEach(school => {
+					console.log("학교 시간 = ",school.testDate)
 					const testDate = new Date(school.testDate);
-					const formattedDate = `${testDate.getFullYear().toString().substr(-2)}-${String(testDate.getMonth() + 1).padStart(2, '0')}-${String(testDate.getDate()).padStart(2, '0')}`;
+					const formattedDate = `${testDate.getFullYear()}-${String(testDate.getMonth() + 1).padStart(2, '0')}-${String(testDate.getDate()).padStart(2, '0')} ${String(testDate.getHours()).padStart(2, '0')}:${String(testDate.getMinutes()).padStart(2, '0')}`;
 
 					const row = document.createElement('tr');
 					row.innerHTML = `
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    `;
 					schoolTableBody.appendChild(row);
 
+					// 검색된 학교를 현장요원에게 배치하는 버튼
 					const btnSelect = document.querySelectorAll('button.selBtn');
 
 					for (let btn of btnSelect) {
@@ -86,16 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function selectSchool(e) {
 		const memberId = document.getElementById('memberName').getAttribute('data-id');
-		const schoolId = e.target.getAttribute('data-id');       //속성의 값을 읽어옴. 
-		console.log("학교 아이디 : ", schoolId, "멤버 아이디 : ", memberId);
+		const schoolId = e.target.getAttribute('data-id');
 
 		if (confirm('이 학교를 선택하시겠습니까?')) {
-
 			const headers = {
 				'Content-Type': 'application/json'
 			};
 
-			// POST 요청으로 schoolId와 memberId를 함께 전송
 			fetch('/admin/select-wordkingday', {
 				method: 'POST',
 				headers: headers,
@@ -105,6 +104,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				})
 			})
 				.then(response => {
+					if (response.status === 409) {
+						alert('이미 선택 및 배정된 학교입니다.');
+						return;
+					}
+					if (!response.ok) {
+						throw new Error('네트워크 오류 발생');
+					}
 					alert('학교 선택이 완료되었습니다.');
 					location.reload();
 				})
@@ -131,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		fetch(`/admin/delete-workingday/${id}`)
 			.then(response => {
+				// sid(schoolId) 를 서버로 보낸다
 				location.reload();
 			})
 			.catch(error => {

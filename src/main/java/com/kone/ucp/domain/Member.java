@@ -44,7 +44,7 @@ public class Member extends BaseTimeEntity {
 	private String phoneNumber;		//연락처
 	
 	@Builder.Default
-	@ToString.Exclude 
+	@ToString.Exclude  // 서버 -> html(화면) 값은 넘어가지만, [[${member}]] 에는 안보임
 	@JsonInclude
 	@ElementCollection(fetch = FetchType.EAGER)
 	/*

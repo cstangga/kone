@@ -7,6 +7,7 @@ import com.kone.ucp.dto.SchoolDto;
 import com.kone.ucp.service.SchoolService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -68,17 +69,20 @@ public class AdminController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/search")
-	public ResponseEntity<List<School>> searchSchools(@RequestParam("keyword") String keyword) {
-		log.info("keyword = {} ", keyword);
+	public ResponseEntity<List<School>> searchSchools(@RequestParam(value = "keyword", required = false) String keyword) {
+		log.info("GET - searchSchools / keyword = {}", keyword);
 		List<School> schools;
+
 		if (keyword != null && !keyword.trim().isEmpty()) {
-			schools = schoolRepo.findByNameContaining(keyword);
+			schools = schoolRepo.findByNameContainingWithMember(keyword);
 		} else {
-			schools = schoolRepo.findAll();
+			schools = schoolRepo.findAllWithMember();
 		}
 
 		return ResponseEntity.ok(schools);
 	}
+
+
 	
 	// admim/contractList.html ->선발된 근로자의 계약서 상태 리스트 전체를 불러옴.
 	@PreAuthorize("hasRole('ADMIN')")
@@ -94,6 +98,7 @@ public class AdminController {
 		model.addAttribute("currentPage", pageNo);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("keyword", keyword);
+		log.info("page = {}", page.toList());
 
 		return "/admin/contractList";
 	}
@@ -118,8 +123,10 @@ public class AdminController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/apply/{id:\\d+}")
 	public String viewContract(@PathVariable("id") Long id, Model model) { // 변수 이름을 명시적으로 지정
+		log.info("GET - viewContract");
 		model.addAttribute("contract", contractSvc.getContract(id));
 		model.addAttribute("school", contractSvc.getWorkingSchool(id));
+		log.info("school = {} ", contractSvc.getWorkingSchool(id));
 		model.addAttribute("cancel", contractSvc.getCancel(id));
 		
 		return "/admin/applyDetail";
@@ -149,20 +156,28 @@ public class AdminController {
 	// 근무 학교 지정
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/select-wordkingday")
-	public ResponseEntity<?> selectSchoold(@RequestBody Map<String, Long> request) {
-		log.info("POST - 학교 선택 완료");
-		log.info("학교 아이디 {}, 멤버 아이디 {}", request.get("schoolId"), request.get("memberId"));
+	public ResponseEntity<?> selectSchool(@RequestBody Map<String, Long> request) {
+		log.info("POST - 학교 선택 요청");
+		Long schoolId = request.get("schoolId");
+		Long memberId = request.get("memberId");
 
-		contractSvc.addWorkingDay(request.get("schoolId"), request.get("memberId"));
-
-		return ResponseEntity.ok(200);
+		try {
+			contractSvc.addWorkingDay(schoolId, memberId);
+			return ResponseEntity.ok("학교 선택 완료");
+		} catch (IllegalStateException e) {
+			log.warn("중복 선택된 학교입니다. {}", e.getMessage());
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.error("잘못된 요청입니다: {}", e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	// 근무 학교 삭제
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/delete-workingday/{id}")
 	public ResponseEntity<?> deleteScgool(@PathVariable("id") Long id) {
-		log.info("GET - 학교 삭제 {}", id);
+		log.info("GET - 학교 삭제, schoolId = {}", id);
 
 		contractSvc.deleteWorkingDay(id);
 
@@ -185,22 +200,33 @@ public class AdminController {
 	@PostMapping("/cancel")
 	public String removeMemberCancel(@RequestParam("id")Long id, @RequestParam("reason")String reason, @RequestParam("callName")String callName) {
 		log.info("POST - 관리자 현장요원 취소");
-		
+
 		contractSvc.deleteMember(id, reason, callName);
-		
+
 		return "redirect:/admin/apply/list";
 	}
 
-	// 최창욱 /  학교 리스트 화면 호출
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/school/list")
-	public String schoolList(Model model){
-		log.info("GET - 학교 리스트");
-		List<SchoolDto> schoolDtoList = schoolSvc.findAll();
-		log.info("schoolList = {}",schoolDtoList);
-		model.addAttribute("schoolList",schoolDtoList);
+	@PreAuthorize("hasRole('ADMIN')")
+	public String schoolList(@RequestParam(value = "area", required = false) String area,
+							 @RequestParam(value = "keyword", required = false) String keyword,
+							 Model model) {
+		List<SchoolDto> schoolList;
+
+		if (keyword != null && !keyword.isEmpty()) {
+			schoolList = schoolSvc.searchByKeyword(keyword);
+		} else if (area != null && !area.isEmpty() && !area.equals("전체")) {
+			schoolList = schoolSvc.findByArea(area);
+		} else {
+			schoolList = schoolSvc.findAllWithMember();
+		}
+		log.info("schoolList = {}",schoolList);
+		model.addAttribute("schoolList", schoolList);
+		model.addAttribute("selectedArea", area);
+		model.addAttribute("searchedKeyword", keyword);
 		return "/admin/schoolList";
 	}
+	// 최창욱 /  학교 리스트 화면 호출
 
 	// 최창욱 /  학교 등록 폼 화면 호출
 	@PreAuthorize("hasRole('ADMIN')")
@@ -231,7 +257,7 @@ public class AdminController {
 	public String schoolDelete(@PathVariable("id") Long id){
 		log.info("POST - 학교 삭제");
 		schoolSvc.delete(id);
-		return "/admin/schoolList";
+		return "/admin/school/list";
 	}
 
 	@PostMapping("/schoolUpdate")
@@ -239,7 +265,7 @@ public class AdminController {
 		log.info("POST - 학교 정보 업데이트");
 		log.info("schoolDto = {}",schoolDto);
 		schoolSvc.update(schoolDto);
-		return "/admin/schoolList";
+		return "redirect:/admin/school/List";
 	}
 
 }

@@ -37,23 +37,21 @@
 
 				<!-- 20250515 은비 수정-->
 				<dt>2. 주민등록번호</dt>
-				<dd>
+				<dd style="display: flex; align-items: center; gap: 10px;">
 					<input class="form-control" type="text" th:field="*{jumin1}" maxlength="6" placeholder="앞 6자리" required
-						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:100px; display:inline-block;" />
+						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:150px;" />
 					-
 					<input class="form-control" type="password" th:field="*{jumin2}" maxlength="7" placeholder="뒤 7자리" required
-						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:110px; display:inline-block;" />
-					<button type="button" id="checkResidentNumberDuplicateBtn">중복확인</button>
-
+						   oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="width:160px;" />
+					<button type="button" id="checkResidentNumberDuplicateBtn" class="btn-outline-primary">중복확인</button>
 				</dd>
 
 				<dt>3. 연락처</dt>
-				<dd>
-					<input class="form-control" type="text" name="phoneNumber"
-						id="phoneNumber" maxlength="11"
-						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-						placeholder="휴대폰번호를 입력해주세요.( - 없이 번호만 입력)" required />
-					<button type="button" id="checkPhoneNumberDuplicateBtn">중복확인</button>
+				<dd style="display: flex; align-items: center; gap: 10px;">
+					<input class="form-control" type="text" name="phoneNumber" id="phoneNumber" maxlength="11"
+						   oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+						   placeholder="휴대폰번호( - 없이 번호만 입력)" required style="flex: 1;" />
+					<button type="button" id="checkPhoneNumberDuplicateBtn" class="btn-outline-primary">중복확인</button>
 				</dd>
 				<dt>4. 지역</dt>
 				<dd class="subtitle">현 거주 지역을 선택해 주세요.</dd>

@@ -8,7 +8,6 @@
 <body>
 	<div class="container">
 		<ul th:replace="~{/layout/fragments::navbar(current='2')}"></ul>
-
 		<form id="searchForm" class="position-relative m-3 pt-4">
 			<input id="keyword" name="keyword" placeholder="이름/ 연락처로 검색"
 				type="text" maxlength="100"
@@ -54,14 +53,15 @@
 						th:text="|${#strings.substring(member.phoneNumber,0,3)}-${#strings.substring(member.phoneNumber,3,7)}-${#strings.substring(member.phoneNumber,7,11)}|">연락처</span>
 					</td>
 					<td th:text="${member.empTypeKor}">직원 형태</td>
-					<td class="col-1"><span th:if="${member.submitType != null}"
+					<td class="col-1">
+						<span th:if="${member.submitType != null}"
 						class="position-relative"> <span
 							th:text="${member.submitType ? '완료' : '미완료'}"
 							th:class="| badge  ${member.submitType ? 'bg-success' : 'bg-warning'}|">
 						</span>
 					</span></td>
 					<td>
-						<div th:if="${member.submitType == null}">
+						<div   th:if="${member.submitType == null and member.empTypeKor != '지사'}">
 							<button class="modal-submit-btn btn btn-primary btn-sm"
 								data-bs-toggle="modal" data-bs-target="#submitModal"
 								th:attr="data-member-id=${member.id}">등록</button>

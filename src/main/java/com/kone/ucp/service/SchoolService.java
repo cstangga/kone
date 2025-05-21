@@ -6,9 +6,9 @@ import com.kone.ucp.repo.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +17,9 @@ public class SchoolService {
     private final SchoolRepository schoolRepository;
 
 
-    public List<SchoolDto> findAll() {
+    public List<SchoolDto> findAllWithMember() {
         log.info("SchoolService / findAll");
-        return schoolRepository.findAll().stream().map(School::toDto).toList();
+        return schoolRepository.findAllWithMember().stream().map(School::toDto).toList();
     }
 
     public void save(SchoolDto schoolDto) {
@@ -45,8 +45,22 @@ public class SchoolService {
 
     public void update(SchoolDto schoolDto) {
         log.info("SchoolService / update = {}",schoolDto);
-
+        School school=schoolRepository.findById(schoolDto.getSchoolId()).orElseThrow();
+        log.info("school = {} ",school);
+        school.update(schoolDto);
+        schoolRepository.save(school);
     }
 
 
+    public List<SchoolDto> findByArea(String area) {
+        log.info("SchoolService / findByArea = {}",area);
+        return schoolRepository.findByAreaWithMember(area).stream().map(School::toDto).toList();
+    }
+
+    public List<SchoolDto> searchByKeyword(String keyword) {
+        return schoolRepository.searchAllFields(keyword)
+                .stream()
+                .map(School::toDto)
+                .collect(Collectors.toList());
+    }
 }

@@ -110,12 +110,13 @@
 				<li class="list-group-item d-flex justify-content-between"
 					style="padding-left: 40px; padding-right: 20px">
 					<div class="col-2" th:text="${work.area}"></div>
-					<div class="col-4" th:text="${work.schoolName}"></div>
-					<div class="col-3"
-						th:text="${#temporals.format(work.workingDate, 'MM월 dd일')}"></div>
+					<div class="col-4" ><a th:href="@{/admin/schoolDetail/{id}(id=${work.sid})}" th:text="${work.schoolName}"></a></div>
+					<div class="col-3" th:text="${#temporals.format(work.workingDate, 'yyyy-MM-dd HH:mm')}">
+
+					</div>
 					<button th:if="${contract.selectionType=='선발'}"
 						class="delBtn btn btn-outline-danger btn-sm"
-						th:data-id="${work.wid}">취소</button>
+						th:data-id="${work.sid}">취소</button>
 				</li>
 			</ul>
 			<div class="d-flex justify-content-center p-4"

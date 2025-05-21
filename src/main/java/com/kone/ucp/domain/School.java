@@ -27,7 +27,6 @@ public class School {
 	@Basic(optional=false)
 	private String address;		//학교 주소
 
-	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="member_fk")
 	private Member member;		// 현장요원
@@ -52,5 +51,13 @@ public class School {
 				.schoolAdminPhoneNumber(schoolAdminPhoneNumber)
 				.testDate(testDate)
 				.build();
+	}
+
+	public void update(SchoolDto dto) {
+		this.address=dto.getSchoolAddress();
+		this.name=dto.getSchoolName();
+		this.schoolAdminName=dto.getSchoolAdminName();
+		this.schoolAdminPhoneNumber=dto.getSchoolAdminPhoneNumber();
+		this.testDate=dto.getTestDate();
 	}
 }

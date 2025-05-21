@@ -20,15 +20,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Slf4j
 public class ContractService {
 
-	private final MemberRepository memberDao;
-	private final WorkingRepo workingDao;
-	private final ImageService imgUtil;
-	private final SchoolRepository schoolDao;
-	private final CancelRepository cancelDao;
+	private final MemberRepository memberRepository;
+	private final WorkingRepo workingRepository;
+	private final ImageService imageService;
+	private final SchoolRepository schoolRepository;
+	private final CancelRepository cancelRepository;
+
 
 	// 현장요원 지원 리스트 가져옴
 	public Page<Member> getAllApplyList(int pageNo, String keyword, String select, Sort sort) {
@@ -39,9 +39,9 @@ public class ContractService {
 		List<EmpType> empTypes = List.of(EmpType.USER, EmpType.BRANCH);
 
 		if (keyword.equals("") && select.equals("all")) {
-			return memberDao.findByEmpTypeIn(empTypes, pageable);
+			return memberRepository.findByEmpTypeIn(empTypes, pageable);
 		} else if (!keyword.equals("") && select.equals("all")) {
-			return memberDao.findByNameContainingOrPhoneNumberContainsOrDesiredAreaContaining(keyword, keyword, keyword,
+			return memberRepository.findByNameContainingOrPhoneNumberContainsOrDesiredAreaContaining(keyword, keyword, keyword,
 					pageable);
 		} else {
 			switch (select) {
@@ -56,7 +56,7 @@ public class ContractService {
 				break;
 			}
 
-			return memberDao.findBySelAndKey(select, keyword, keyword, keyword, pageable);
+			return memberRepository.findBySelAndKey(select, keyword, keyword, keyword, pageable);
 		}
 
 	}
@@ -70,45 +70,46 @@ public class ContractService {
 		List<EmpType> empTypes = List.of(EmpType.USER, EmpType.BRANCH);
 
 		if (keyword.equals("") && select.equals("all")) {
-			return memberDao.findByEmpTypeInAndSelectionType(empTypes, "선발", pageable);
+			return memberRepository.findByEmpTypeInAndSelectionType(empTypes, "선발", pageable);
 		} else if (!keyword.equals("") && select.equals("all")) {
-			return memberDao.findByNameContainingOrPhoneNumberContaining(keyword, keyword, pageable);
+			return memberRepository.findByNameContainingOrPhoneNumberContaining(keyword, keyword, pageable);
 		} else {
 			Page<Member> m = null;
 			switch (select) {
 			case "yes":
-				m = memberDao.findBySelAndTrue(keyword, keyword, pageable);
+				m = memberRepository.findBySelAndTrue(keyword, keyword, pageable);
 				break;
 			case "no":
-				m = memberDao.findBySelAndFalse(keyword, keyword, pageable);
+				m = memberRepository.findBySelAndFalse(keyword, keyword, pageable);
 				break;
 			case "not":
-				m = memberDao.findBySelAndNull(keyword, keyword, pageable);
+				m = memberRepository.findBySelAndNull(keyword, keyword, pageable);
 				break;
 			}
+			log.info("m = {}",m);
 			return m;
 		}
 	}
 
 	public ContractDTO getContract(Long id) {
-		return memberDao.findById(id).map(this::convertToDTO).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+		return memberRepository.findById(id).map(this::convertToDTO).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 	}
 
 	public Cancel getCancel(Long id) {
-		Member m = memberDao.findById(id).orElse(null);
+		Member m = memberRepository.findById(id).orElse(null);
 
-		Cancel c = cancelDao.findByMember(m);
+		Cancel c = cancelRepository.findByMember(m);
 		return c;
 	}
 
 	public List<ContractDTO> getContractsBySubmitType(boolean submitType) {
-		return memberDao.findBySubmitType(submitType).stream().map(this::convertToDTO).collect(Collectors.toList());
+		return memberRepository.findBySubmitType(submitType).stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
 	private ContractDTO convertToDTO(Member member) {
 
 		// 근무일 정보 조회
-		List<LocalDateTime> workingDays = workingDao.findByMemberId(member.getId()).stream()
+		List<LocalDateTime> workingDays = workingRepository.findByMemberId(member.getId()).stream()
 				.map(workingday -> workingday.getSchool().getTestDate()).collect(Collectors.toList());
 
 		ContractDTO dto = new ContractDTO();
@@ -125,20 +126,20 @@ public class ContractService {
 
 	// 검색 메서드
 	public List<ContractDTO> searchContracts(String name, String phoneNumber, String desiredArea) {
-		return memberDao.searchMembers(name, phoneNumber, desiredArea).stream().map(this::convertToDTO)
+		return memberRepository.searchMembers(name, phoneNumber, desiredArea).stream().map(this::convertToDTO)
 				.collect(Collectors.toList());
 	}
 
 	@Transactional
 	public void updateToSelected(Long id) {
-		Member member = memberDao.findById(id).orElseThrow(() -> new RuntimeException("해당 ID의 현장요원을 찾을 수 없습니다."));
+		Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 ID의 현장요원을 찾을 수 없습니다."));
 		member.setSelectionType("선발");
-		memberDao.save(member);
+		memberRepository.save(member);
 	}
 
 	// selectionType별 필터링 메서드 수정
 	public List<ContractDTO> getContractsBySelectionType(String selectionType) {
-		return memberDao.findBySelectionType(selectionType).stream()
+		return memberRepository.findBySelectionType(selectionType).stream()
 				.filter(member -> !member.getEmpType().contains(EmpType.ADMIN)) // ADMIN 제외
 				.map(this::convertToDTO).collect(Collectors.toList());
 	}
@@ -147,14 +148,14 @@ public class ContractService {
 	 * 24/12/11 김연수 작성 계약서 폼 데이터 가져오는 서비스 구현
 	 */
 	public ContractCheckDTO getContractCheck(Long id) {
-		Member m = memberDao.findById(id).orElse(null);
+		Member m = memberRepository.findById(id).orElse(null);
 
 		// 근무일 정보 조회
-		List<LocalDateTime> workingDays = workingDao.findByMemberId(m.getId()).stream()
+		List<LocalDateTime> workingDays = workingRepository.findByMemberId(m.getId()).stream()
 				.map(workingday -> workingday.getSchool().getTestDate()).collect(Collectors.toList());
 
 		// 이미지 가져오기
-		Image i = imgUtil.getAllImg(m);
+		Image i = imageService.getAllImg(m);
 
 		return ContractCheckDTO.builder().id(m.getId()).name(m.getName()).phoneNumber(m.getPhoneNumber())
 				.creationDate(m.getCreation_date()).pay(m.getPay()).workingDays(workingDays)
@@ -162,10 +163,10 @@ public class ContractService {
 	}
 
 	public ContractCheckDTO getMemberInfo(Long id) {
-		Member m = memberDao.findById(id).orElse(null);
+		Member m = memberRepository.findById(id).orElse(null);
 
 		// 근무일 정보 조회
-		List<LocalDateTime> workingDays = workingDao.findByMemberId(m.getId()).stream()
+		List<LocalDateTime> workingDays = workingRepository.findByMemberId(m.getId()).stream()
 				.map(workingday -> workingday.getSchool().getTestDate()).collect(Collectors.toList());
 
 		return ContractCheckDTO.builder().id(m.getId()).name(m.getName()).phoneNumber(m.getPhoneNumber())
@@ -174,14 +175,14 @@ public class ContractService {
 
 	// aaa
 	public ContractInfoDto getMemberInfoCheck(Long id) {
-		Member m = memberDao.findById(id).orElse(null);
+		Member m = memberRepository.findById(id).orElse(null);
 
 		// 근무일 정보 조회
-		List<LocalDateTime> workingDays = workingDao.findByMemberId(m.getId()).stream()
+		List<LocalDateTime> workingDays = workingRepository.findByMemberId(m.getId()).stream()
 				.map(workingday -> workingday.getSchool().getTestDate()).collect(Collectors.toList());
 
 		// 이미지 전체 검색
-		Image i = imgUtil.getAllImg(m);
+		Image i = imageService.getAllImg(m);
 
 		return ContractInfoDto.builder().eType(m.getEmpTypeKor()).id(id).name(m.getName())
 				.phoneNumber(m.getPhoneNumber()).creationDate(m.getCreation_date()).pay(m.getPay())
@@ -195,7 +196,7 @@ public class ContractService {
 	public void updateMemberType(Long id, String empType) {
 		try {
 			// 1. 멤버 조회
-			Member member = memberDao.findById(id)
+			Member member = memberRepository.findById(id)
 					.orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
 
 			log.info("Before update - Member ID: {}, Current EmpType: {}, SelectionType: {}", id, member.getEmpType(),
@@ -214,10 +215,10 @@ public class ContractService {
 			member.setSelectionType("선발");
 
 			// 4. 변경사항 저장
-			memberDao.saveAndFlush(member); // 즉시 DB에 반영
+			memberRepository.saveAndFlush(member); // 즉시 DB에 반영
 
 			// 5. 저장 후 다시 조회하여 확인
-			Member updatedMember = memberDao.findById(id).orElseThrow();
+			Member updatedMember = memberRepository.findById(id).orElseThrow();
 			log.info("After update - Member ID: {}, New EmpType: {}, SelectionType: {}", id, updatedMember.getEmpType(),
 					updatedMember.getSelectionType());
 
@@ -228,21 +229,31 @@ public class ContractService {
 		}
 	}
 
-	public void addWorkingDay(Long sid, Long mid) {
-		log.info("AddWorkingDay");
+	public void addWorkingDay(Long schoolId, Long memberId) {
+		log.info("ContractService / AddWorkingDay");
 
-		Member m = memberDao.findById(mid).orElse(null);
-		School s = schoolDao.findById(sid).orElse(null);
+		Member m = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
+		School s = schoolRepository.findById(schoolId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 학교입니다."));
 
+		// 중복 확인
+		boolean schoolAssigned = workingRepository.existsBySchoolId(schoolId);
+		if (schoolAssigned) {
+			throw new IllegalStateException("이미 다른 요원에게 배정된 학교입니다.");
+		}
+
+		// 학교에 요원 배정
+		s.setMember(m);
+		schoolRepository.save(s);
+
+		// Workingday 저장
 		Workingday w = Workingday.builder().member(m).school(s).build();
-
-		workingDao.save(w);
+		workingRepository.save(w);
 	}
 
 	public List<Map<String, Object>> getWorkingSchool(Long mid) {
-		List<Workingday> workingdays = workingDao.findWorkingInfoByMemberId(mid);
+		List<Workingday> workingDays = workingRepository.findWorkingInfoByMemberId(mid);
 
-		List<Map<String, Object>> result = workingdays.stream().map(w -> {
+		List<Map<String, Object>> result = workingDays.stream().map(w -> {
 			Map<String, Object> map = new HashMap<>();
 			map.put("wid", w.getId());
 			map.put("sid", w.getSchool().getId());
@@ -257,46 +268,50 @@ public class ContractService {
 	@Transactional
 	public void deleteWorkingDay(Long id) {
 		log.info("delete Service");
-		workingDao.deleteById(id);
+		log.info("id = {}",id);
+		School school=schoolRepository.findById(id).orElseThrow();
+		school.setMember(null);
+		schoolRepository.save(school);
+		workingRepository.deleteBySchoolId(id);
 	}
 
 	@Transactional
 	// 계약서 폼 등록 시(submitType-> false / pay 등록)
 	public void registerContract(Long id, Long pay) {
-		Member member = memberDao.findById(id).orElseThrow();
+		Member member = memberRepository.findById(id).orElseThrow();
 
 		member.setSubmitType(false);
 		member.setPay(pay);
 
-		memberDao.save(member);
+		memberRepository.save(member);
 	}
 
 	// 관리자 계약서 폼 수정
 	@Transactional
 	public void setContract(Member m) {
-		Member member = memberDao.findById(m.getId()).orElse(null);
+		Member member = memberRepository.findById(m.getId()).orElse(null);
 		member.setPay(m.getPay());
 		member.setResidentNumber(m.getResidentNumber());
 		member.setAccountNumber(m.getAccountNumber());
 		member.setAccountHolder(m.getAccountHolder());
 
-		memberDao.save(member);
+		memberRepository.save(member);
 	}
 
 	// 제출을 미제출로 수정
 	@Transactional
 	public void setUnsubmit(Long id) {
 
-		Member m = memberDao.findById(id).orElse(null);
+		Member m = memberRepository.findById(id).orElse(null);
 		m.setSubmitType(false);
-		memberDao.save(m);
+		memberRepository.save(m);
 
 	}
 
 	@Transactional
 	// 관리자측에서 현장요원 취소 처리
 	public void deleteMember(Long id, String reason, String callName) {
-		Member m = memberDao.findById(id).orElse(null);
+		Member m = memberRepository.findById(id).orElse(null);
 
 		// 회원정보 초기화(지원 시의 기본정보 빼고)
 		m.updateSelectionType("취소");
@@ -308,25 +323,25 @@ public class ContractService {
 		m.setBank(null);
 		m.setResidentNumber(null);
 
-		memberDao.save(m);
+		memberRepository.save(m);
 
 		// 이미지 삭제
-		imgUtil.delAllImg(id);
+		imageService.delAllImg(id);
 
 		Cancel c = Cancel.builder().member(m).reason(reason).callName(callName).build();
-		cancelDao.save(c);
+		cancelRepository.save(c);
 	}
 
 	public List<ExcelRequestDTO> getExcelInfo() {
 		List<ExcelRequestDTO> e = new ArrayList<>();
-		List<Member> members = memberDao.findAll();
+		List<Member> members = memberRepository.findAll();
 		
 		for (Member m : members) {
 
 			if (m.getEmpTypeKor().equals("일반")
 					&& m.getSelectionType().equals("선발") && m.getSubmitType() == true) {
 
-				List<Workingday> workingdays = workingDao.findByMemberId(m.getId());
+				List<Workingday> workingdays = workingRepository.findByMemberId(m.getId());
 
 				for (Workingday w : workingdays) {
 

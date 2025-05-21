@@ -38,11 +38,35 @@ body {
 }
 
 .main_content {
-	padding : 10px 20px;
+	padding : 5px 20px;
 }
 
 dt {
-	margin-top : 30px;
+	margin-top : 15px;
+}
+
+/* 등록/수정 버튼 */
+.btn-outline-primary {
+	padding: 6px 12px;
+	border: 1px solid #007bff;
+	background-color: transparent;
+	color: #007bff;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.btn-outline-primary a {
+	text-decoration: none;
+	color: #007bff;
+}
+
+.btn-outline-primary:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+.btn-outline-primary:hover a {
+	color: white;
 }
 
 

@@ -15,4 +15,13 @@ public interface WorkingRepo extends JpaRepository<Workingday, Long> {
 	// 멤버 ID로 Workingday와 School 정보를 함께 조회
 	@Query("SELECT w FROM Workingday w JOIN FETCH w.school WHERE w.member.id = :memberId")
 	List<Workingday> findWorkingInfoByMemberId(@Param("memberId") Long memberId);
+
+	void deleteBySchoolId(long id);
+
+	Workingday findByMemberIdAndSchoolId(long memberId, long schoolId);
+
+	Boolean existsByMemberIdAndSchoolId(long memberId, long schoolId);
+
+	boolean existsBySchoolId(long schoolId);
+
 }

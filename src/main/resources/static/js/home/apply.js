@@ -40,25 +40,27 @@ document.addEventListener('DOMContentLoaded', function() {
 	btnSubmit.addEventListener('click', submitForm);
 
 	const form = document.getElementById('applyform');
-	let isResidentNumberChecked = false; // 주민번호 중복체크를 했는가
-	let isPhoneNumberChecked = false; // 핸드폰 번호 중복체크를 했는가
+	let isResidentNumberChecked = false; // 주민번호 중복체크를 했는가 (true=중복체크 했다), (false = 중복체크 안했다)
+	let isPhoneNumberChecked = false; // 핸드폰 번호 중복체크를 했는가 (true=중복체크 했다), (false = 중복체크 안했다)
 
 	// 폼 제출
 	function submitForm(e) {
 
 		const area = document.getElementById('desiredArea');
-		if (area.value == '지역을 선택해주세요.') {
+		if (area.value === '지역을 선택해주세요.') {
 			e.preventDefault();
 			alert("지역을 선택하세요");
 			return;
 		}
 
-		if (!isResidentNumberChecked) {
+		if (isResidentNumberChecked===false) {
+			console.log("submitForm / isResidentNumberChecked = "+isResidentNumberChecked);
 			alert('주민번호 중복 확인을 완료해주세요.');
 			return false;
 		}
-		if (!isPhoneNumberChecked) {
-			alert('전화번호 중복 확인을 완료해주세요.');
+		if (isPhoneNumberChecked === false) {
+			console.log("submitForm / isPhoneNumberChecked = "+isPhoneNumberChecked);
+			alert('전화번호 중복 확인을 완료해주세요.11111');
 			return false;
 		}
 		form.submit();
@@ -150,6 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// ✅ 버튼 상태 변경 함수 // 0=활성화, 1 = 비활성화
 	function phoneNumberCheckBtnStatus(status) {
+		console.log("phoneNumberCheckBtnStatus / status = {}",status);
+
 
 		// 중복 체크를 할 수 있다. = 중복체크를 해야한다 or 중복체크 해야 될 값이 변경됐다
 		if(status===0) {
@@ -172,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function residentNumberCheckBtnStatus(status) {
+		console.log("residentNumberCheckBtnStatus / status = {}",status);
 
 		// 중복 체크를 할 수 있다. = 중복체크를 해야한다 or 중복체크 해야 될 값이 변경됐다
 		if(status===0) {
